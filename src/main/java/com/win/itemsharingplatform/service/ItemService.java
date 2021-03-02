@@ -18,7 +18,6 @@ public class ItemService {
     }
 
     public Item addItem(Item item){
-        item.setName("Petras");
         return itemRepository.save(item);
     }
 
@@ -26,16 +25,8 @@ public class ItemService {
         return itemRepository.findAll();
     }
 
-    public Item updateItem(Item item){
-        return itemRepository.save(item);
-    }
-
     public Item findItemById(Long id){
         return itemRepository.findItemById(id)
                 .orElseThrow(() -> new UserNotFoundException("User by id " + id + " was not found"));
-    }
-
-    public void deleteItem(Long id){
-        itemRepository.deleteItemById(id);
     }
 }
