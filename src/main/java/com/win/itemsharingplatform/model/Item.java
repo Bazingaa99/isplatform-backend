@@ -1,5 +1,7 @@
 package com.win.itemsharingplatform.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
@@ -10,15 +12,36 @@ public class Item implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, updatable = false)
     private Long id;
-    //private Long ownerId;
-    //private Long groupId;
-    //private Long categoryId;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
+
+    @ManyToOne
+    @JoinColumn(name="group_id", nullable = false)
+    private Group group;
+
+    @ManyToOne
+    @JoinColumn(name="category_id", nullable = false)
+    private Category category;
+
+    @Column(name = "name", unique = true)
     private String name;
+
+    @Column(name = "description")
     private String description;
+
     private int duration;
-    //private String pictureId;
-    //private Date dateCreated;
-    //private int viewCount;
+
+    @Column(name = "picture_id")
+    private String pictureId;
+
+    @Column(name = "date_created")
+    @CreationTimestamp
+    private Date dateCreated;
+
+    @Column(name = "view_count")
+    private int viewCount;
 
     public Item() {}
 
@@ -48,29 +71,29 @@ public class Item implements Serializable {
         return id;
     }
 
-//    public Long getOwnerId() {
-//        return ownerId;
-//    }
-//
-//    public void setOwnerId(Long ownerId) {
-//        this.ownerId = ownerId;
-//    }
-//
-//    public long getGroupId() {
-//        return groupId;
-//    }
-//
-//    public void setGroupId(Long groupId) {
-//        this.groupId = groupId;
-//    }
-//
-//    public Long getCategory() {
-//        return categoryId;
-//    }
-//
-//    public void setCategory(Long categoryId) {
-//        this.categoryId = categoryId;
-//    }
+    public Long getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
+
+    public Long getCategory() {
+        return categoryId;
+    }
+
+    public void setCategory(Long categoryId) {
+        this.categoryId = categoryId;
+    }
 
     public String getName() {
         return name;
@@ -96,29 +119,29 @@ public class Item implements Serializable {
         this.duration = duration;
     }
 
-//    public String getPictureId() {
-//        return pictureId;
-//    }
-//
-//    public void setPictureId(String pictureId) {
-//        this.pictureId = pictureId;
-//    }
-//
-//    public Date getDateCreated() {
-//        return dateCreated;
-//    }
-//
-//    public void setDateCreated(Date dateCreated) {
-//        this.dateCreated = dateCreated;
-//    }
-//
-//    public int getViewCount() {
-//        return viewCount;
-//    }
-//
-//    public void setViewCount(int viewCount) {
-//        this.viewCount = viewCount;
-//    }
+    public String getPictureId() {
+        return pictureId;
+    }
+
+    public void setPictureId(String pictureId) {
+        this.pictureId = pictureId;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public int getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(int viewCount) {
+        this.viewCount = viewCount;
+    }
 
     @Override
     public String toString() {
