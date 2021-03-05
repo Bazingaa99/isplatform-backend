@@ -1,6 +1,6 @@
 package com.win.itemsharingplatform.service;
 
-import com.win.itemsharingplatform.exception.UserNotFoundException;
+import com.win.itemsharingplatform.exception.ItemNotFoundException;
 import com.win.itemsharingplatform.model.Item;
 import com.win.itemsharingplatform.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +27,6 @@ public class ItemService {
 
     public Item findItemById(Long id){
         return itemRepository.findItemById(id)
-                .orElseThrow(() -> new UserNotFoundException("User by id " + id + " was not found"));
+                .orElseThrow(() -> new ItemNotFoundException("Item by id (" + id + ") was not found"));
     }
 }

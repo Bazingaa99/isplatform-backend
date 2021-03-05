@@ -14,23 +14,24 @@ public class Item implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id", nullable = false)
+    @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false)
     private User owner;
 
     @ManyToOne
-    @JoinColumn(name="group_id", nullable = false)
-    private Group group;
+    @JoinColumn(name="group_id", referencedColumnName = "id", nullable = false)
+    private UserGroup group;
 
     @ManyToOne
-    @JoinColumn(name="category_id", nullable = false)
+    @JoinColumn(name="category_id", referencedColumnName = "id",  nullable = false)
     private Category category;
 
-    @Column(name = "name", unique = true)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "description")
     private String description;
 
+    @Column(name = "duration", nullable = false)
     private int duration;
 
     @Column(name = "picture_id")
@@ -49,50 +50,51 @@ public class Item implements Serializable {
         this.id = id;
     }
 
-    public Item(long ownerId, long groupId, Long category, String name, String description, int duration, String pictureId, Date dateCreated, int viewCount){
-//        this.ownerId = ownerId;
-//        this.groupId = groupId;
-//        this.categoryId = category;
+    public Item(User owner, UserGroup group, Category category, String name, String description, int duration, String pictureId, Date dateCreated, int viewCount){
+        this.owner = owner;
+        this.group = group;
+        this.category = category;
         this.name = name;
         this.description = description;
         this.duration = duration;
-//        this.pictureId = pictureId;
-//        this.dateCreated = dateCreated;
-//        this.viewCount = viewCount;
+        this.pictureId = pictureId;
+        this.dateCreated = dateCreated;
+        this.viewCount = viewCount;
     }
 
-    public Item(String name, String description, int duration){
-        this.name = name;
-        this.description = description;
-        this.duration = duration;
-    }
+//    public Item(String name, String description, int duration, String pictureId, int viewCount){
+//        this.name = name;
+//        this.description = description;
+//        this.duration = duration;
+//        this.viewCount = viewCount;
+//    }
 
     public Long getId(){
         return id;
     }
 
-    public Long getOwnerId() {
-        return ownerId;
+    public User getOwner() {
+        return owner;
     }
 
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
-    public long getGroupId() {
-        return groupId;
+    public UserGroup getGroup() {
+        return group;
     }
 
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
+    public void setGroup(UserGroup group) {
+        this.group = group;
     }
 
-    public Long getCategory() {
-        return categoryId;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategory(Long categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String getName() {
