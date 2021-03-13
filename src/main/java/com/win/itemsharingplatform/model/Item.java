@@ -18,10 +18,6 @@ public class Item implements Serializable {
     private User owner;
 
     @ManyToOne
-    @JoinColumn(name="group_id", nullable = false)
-    private Group group;
-
-    @ManyToOne
     @JoinColumn(name="category_id", nullable = false)
     private Category category;
 
@@ -71,29 +67,6 @@ public class Item implements Serializable {
         return id;
     }
 
-    public Long getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
-    }
-
-    public long getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
-    }
-
-    public Long getCategory() {
-        return categoryId;
-    }
-
-    public void setCategory(Long categoryId) {
-        this.categoryId = categoryId;
-    }
 
     public String getName() {
         return name;

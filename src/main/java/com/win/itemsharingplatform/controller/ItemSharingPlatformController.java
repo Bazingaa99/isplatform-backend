@@ -1,4 +1,4 @@
-package com.win.itemsharingplatform;
+package com.win.itemsharingplatform.controller;
 
 import com.win.itemsharingplatform.model.Item;
 import com.win.itemsharingplatform.service.ItemService;
