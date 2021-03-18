@@ -1,4 +1,4 @@
-package com.win.itemsharingplatform;
+package com.win.itemsharingplatform.resources;
 
 import com.win.itemsharingplatform.model.Item;
 import com.win.itemsharingplatform.service.ItemService;
@@ -10,12 +10,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/isp")
-public class ItemSharingPlatformController {
+public class ItemResource {
     private final ItemService itemService;
 
-    public ItemSharingPlatformController(ItemService itemService) {
-        this.itemService = itemService;
-    }
+    public ItemResource(ItemService itemService) { this.itemService = itemService; }
 
     @GetMapping("/all/items")
     public ResponseEntity<List<Item>> getAllItems () {
@@ -31,7 +29,14 @@ public class ItemSharingPlatformController {
 
     @PostMapping("/add/item")
     public ResponseEntity<Item> addItem(@RequestBody Item item) {
+        //User owner = userService.findUserById(
         Item newItem = itemService.addItem(item);
         return new ResponseEntity<>(newItem, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/find/item/group/{group_id}")
+    public ResponseEntity<Item> getItemByGroupId (@PathVariable("group_id") Long id) {
+        Item item  = itemService.findItemById(id);
+        return new ResponseEntity<>(item, HttpStatus.OK);
     }
 }
