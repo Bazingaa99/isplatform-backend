@@ -1,7 +1,8 @@
-package com.win.itemsharingplatform;
+package com.win.itemsharingplatform.resources;
 
 import com.win.itemsharingplatform.model.UsersGroup;
 import com.win.itemsharingplatform.service.UsersGroupService;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +46,12 @@ public class UsersGroupResource {
     public ResponseEntity<?> deleteUsersGroup(@PathVariable("id") Long id) {
         usersGroupService.deleteUsersGroup(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/find/user/groups/{userId}")
+    public ResponseEntity<List<UsersGroup>> usersGroup(@PathVariable("userId") Long userId){
+        List<UsersGroup> groups = usersGroupService.findUsersGroupsByUserId(userId);
+        return new ResponseEntity<>(groups, HttpStatus.OK);
     }
 
 

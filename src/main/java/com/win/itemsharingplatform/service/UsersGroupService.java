@@ -27,6 +27,10 @@ public class UsersGroupService {
         return usersGroupRepository.findAll();
     }
 
+    public List<UsersGroup> findUsersGroupsByUserId(Long userId){
+        return usersGroupRepository.findUsersGroupsByUserId(userId);
+    }
+
     public UsersGroup updateUsersGroup(UsersGroup usersGroup) {
         return usersGroupRepository.save(usersGroup);
     }

@@ -22,7 +22,7 @@ public class Item implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name="group_id", referencedColumnName = "id", nullable = false)
-    private UserGroup group;
+    private UsersGroup group;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -54,7 +54,7 @@ public class Item implements Serializable {
         this.id = id;
     }
 
-    public Item(User owner, UserGroup group, Category category, String name, String description, int duration, String pictureId, Date dateCreated, int viewCount){
+    public Item(User owner, UsersGroup group, Category category, String name, String description, int duration, String pictureId, Date dateCreated, int viewCount){
         this.owner = owner;
         this.group = group;
         this.category = category;
@@ -85,11 +85,11 @@ public class Item implements Serializable {
         this.owner = owner;
     }
 
-    public UserGroup getGroup() {
+    public UsersGroup getGroup() {
         return group;
     }
 
-    public void setGroup(UserGroup group) {
+    public void setGroup(UsersGroup group) {
         this.group = group;
     }
 
