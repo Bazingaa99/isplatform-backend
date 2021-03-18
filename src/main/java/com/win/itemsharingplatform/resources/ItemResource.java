@@ -34,9 +34,9 @@ public class ItemResource {
         return new ResponseEntity<>(newItem, HttpStatus.CREATED);
     }
 
-    @GetMapping("/find/item/group/{group_id}")
-    public ResponseEntity<Item> getItemByGroupId (@PathVariable("group_id") Long id) {
-        Item item  = itemService.findItemById(id);
+    @GetMapping("/find/group/items/{group_id}")
+    public ResponseEntity<List<Item>> getItemByGroupId (@PathVariable("group_id") Long groupId) {
+        List<Item> item  = itemService.findItemsByGroupId(groupId);
         return new ResponseEntity<>(item, HttpStatus.OK);
     }
 }

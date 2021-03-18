@@ -29,4 +29,8 @@ public class ItemService {
         return itemRepository.findItemById(id)
                 .orElseThrow(() -> new ItemNotFoundException("Item by id (" + id + ") was not found"));
     }
+
+    public List<Item> findItemsByGroupId(Long groupId){
+        return itemRepository.findItemsByGroupId(groupId);
+    }
 }
