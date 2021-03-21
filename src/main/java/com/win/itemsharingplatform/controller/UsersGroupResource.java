@@ -1,4 +1,4 @@
-package com.win.itemsharingplatform.resources;
+package com.win.itemsharingplatform.controller;
 
 import com.win.itemsharingplatform.model.UsersGroup;
 import com.win.itemsharingplatform.service.UsersGroupService;

@@ -1,4 +1,10 @@
+package com.win.itemsharingplatform.controller;
+
+<<<<<<< HEAD:src/main/java/com/win/itemsharingplatform/resources/ItemResource.java
 package com.win.itemsharingplatform.resources;
+=======
+package com.win.itemsharingplatform.controller;
+>>>>>>> ecf4826b6ea7b40db39a4ce38372aa5f66434052:src/main/java/com/win/itemsharingplatform/controller/ItemSharingPlatformController.java
 
 import com.win.itemsharingplatform.model.Item;
 import com.win.itemsharingplatform.service.ItemService;
