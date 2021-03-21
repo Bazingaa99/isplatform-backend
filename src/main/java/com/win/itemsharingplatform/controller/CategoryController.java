@@ -11,11 +11,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/isp")
-public class CategoryResource {
+public class CategoryController {
     private final CategoryService categoryService;
 
     @Autowired
-    public CategoryResource(CategoryService categoryService) { this.categoryService = categoryService; }
+    public CategoryController(CategoryService categoryService) { this.categoryService = categoryService; }
 
     @GetMapping("/all/categories")
     public ResponseEntity<List<Category>> getAllCategories () {

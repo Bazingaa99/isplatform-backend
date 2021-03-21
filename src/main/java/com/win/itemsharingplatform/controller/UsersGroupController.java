@@ -11,10 +11,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/usersgroup")
-public class UsersGroupResource {
+public class UsersGroupController {
     private final UsersGroupService usersGroupService;
 
-    public UsersGroupResource(UsersGroupService usersGroupService) {
+    public UsersGroupController(UsersGroupService usersGroupService) {
         this.usersGroupService = usersGroupService;
     }
 

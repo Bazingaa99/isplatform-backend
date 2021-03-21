@@ -45,6 +45,10 @@ public class User implements UserDetails {
 
     }
 
+    public User(Long id){
+        this.id = id;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
