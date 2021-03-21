@@ -28,7 +28,7 @@ public class JwtTokenProvider {
     @Value("${security.jwt.token.secret-key:secret}")
     private String secretKey;
 
-    @Value("${security.jwt.token.expire-length:900000}") // 15min sesijos trukme
+    @Value("${security.jwt.token.expire-length:100000}") // 15min sesijos trukme
     private long validityInMilliseconds;
 
     private final UserService userService;
@@ -43,8 +43,9 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String username) {
+    public String createToken(String username, List<String> roles) {
         Claims claims = Jwts.claims().setSubject(username);
+        claims.put("roles", roles);
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);

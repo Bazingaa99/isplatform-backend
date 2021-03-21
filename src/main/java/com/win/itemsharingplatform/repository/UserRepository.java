@@ -13,6 +13,10 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User,Long> {
     Optional<User> findByEmail(String email);
 
+
+    @Query("SELECT isEnabled from User where email=?1")
+    boolean isUserEnabled (String email);
+
     @Transactional
     @Modifying
     @Query("UPDATE User a " +

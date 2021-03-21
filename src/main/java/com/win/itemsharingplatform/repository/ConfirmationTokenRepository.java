@@ -15,6 +15,12 @@ import java.util.Optional;
 public interface ConfirmationTokenRepository extends JpaRepository<ConfirmationToken,Long> {
     Optional<ConfirmationToken> findByToken(String token);
 
+    @Query(value = "SELECT token " +
+            "FROM Confirmation_Token us " +
+            "WHERE user_id=:id",nativeQuery = true)
+    String findConfirmationTokenByUser(long id);
+
+
     @Transactional
     @Modifying
     @Query("UPDATE ConfirmationToken c " +

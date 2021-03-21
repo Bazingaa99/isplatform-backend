@@ -1,15 +1,19 @@
 package com.win.itemsharingplatform.service;
 
+import com.win.itemsharingplatform.exception.UserEmailExistsException;
+import com.win.itemsharingplatform.exception.UserException;
 import com.win.itemsharingplatform.model.ConfirmationToken;
 import com.win.itemsharingplatform.model.User;
 import com.win.itemsharingplatform.model.request.RegistrationRequest;
 import com.win.itemsharingplatform.model.response.ConfirmResponse;
 import com.win.itemsharingplatform.repository.EmailSender;
+import com.win.itemsharingplatform.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -18,22 +22,46 @@ public class RegistrationService {
     private final EmailValidator emailValidator;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
-    public String register(RegistrationRequest request) {
+    private final UserRepository userRepository;
+    public String register(RegistrationRequest request) throws UserException {
         boolean isValidEmail = emailValidator.test(request.getEmail());
         if (!isValidEmail) {
             throw new IllegalStateException("email not valid");
         }
-        String token = userService.signUpUser(
-                new User(
-                        request.getUsername(),
+        boolean userExists = userRepository.findByEmail(request.getEmail())
+                .isPresent();
+
+        if(userExists){
+            boolean isUserEnabled = userRepository.isUserEnabled(request.getEmail());
+            if(isUserEnabled==true){
+                throw new UserEmailExistsException(request.getEmail());
+            }
+            else{
+
+                String token = userService.tokenGeneration(userRepository.findByEmail(request.getEmail()).get());
+                //String token = confirmationTokenService.findConfirmationTokenByUser(userRepository.findByEmail(request.getEmail()).get().getId());
+                String link = "http://localhost:4200/confirm?token="+token;
+                emailSender.send(
                         request.getEmail(),
-                        request.getPassword()
-                        ));
-        String link = "http://localhost:4200/confirm?token="+token;
-        emailSender.send(
-                request.getEmail(),
-                buildEmail(request.getUsername(),link));
-        return token;
+                        buildEmail(request.getUsername(),link));
+                return token;
+            }
+        }
+        else{
+
+            String token = userService.signUpUser(
+                    new User(
+                            request.getUsername(),
+                            request.getEmail(),
+                            request.getPassword()
+                    ));
+            String link = "http://localhost:4200/confirm?token="+token;
+            emailSender.send(
+                    request.getEmail(),
+                    buildEmail(request.getUsername(),link));
+            return token;
+        }
+
     }
     @Transactional
     public ConfirmResponse confirmToken(String token) {

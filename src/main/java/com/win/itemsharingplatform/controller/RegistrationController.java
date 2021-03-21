@@ -1,10 +1,15 @@
 package com.win.itemsharingplatform.controller;
 
+import com.win.itemsharingplatform.exception.UserEmailExistsException;
+import com.win.itemsharingplatform.exception.UserException;
+import com.win.itemsharingplatform.exception.UserNotFoundException;
 import com.win.itemsharingplatform.model.request.RegistrationRequest;
 import com.win.itemsharingplatform.model.response.ConfirmResponse;
 import com.win.itemsharingplatform.service.RegistrationService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,8 +19,9 @@ public class RegistrationController {
 
     final private RegistrationService registrationService;
     @PostMapping
-    public String register(@RequestBody RegistrationRequest request) {
-        return registrationService.register(request);
+    public ResponseEntity register(@RequestBody RegistrationRequest request) throws UserException {
+        registrationService.register(request);
+        return new ResponseEntity<>(HttpStatus.CREATED) ;
     }
 
     @GetMapping(path = "confirm")

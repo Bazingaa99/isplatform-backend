@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -29,16 +30,16 @@ public class UserService implements UserDetailsService {
         return userRepository.enableAppUser(email);
     }
     public String signUpUser(User user) {
-        boolean userExists = userRepository.findByEmail(user.getEmail())
-                .isPresent();
-        if (userExists) {
-            throw new IllegalStateException("Email already taken");
-        }
+
         String encodedPassword = bCryptPasswordEncoder
                 .encode(user.getPassword());
         user.setPassword(encodedPassword);
 
         userRepository.save(user);
+        return tokenGeneration(user);
+    }
+
+    public String tokenGeneration(User user){
         String token = UUID.randomUUID().toString();
 
         ConfirmationToken confirmationToken = new ConfirmationToken(
@@ -52,4 +53,5 @@ public class UserService implements UserDetailsService {
 
         return token;
     }
+
 }

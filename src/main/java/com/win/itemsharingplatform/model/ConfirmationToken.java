@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -36,4 +37,6 @@ public class ConfirmationToken {
         this.expiresAt = expiresAt;
         this.user=user;
     }
+
+
 }

@@ -21,11 +21,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/auth/")
-@AllArgsConstructor
 public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;
@@ -34,17 +35,30 @@ public class AuthenticationController {
     private final MessageSource messageSource;
 
 
-    @PostMapping("login")
-    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest data) {
+    @Autowired
+    public AuthenticationController(
+            AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserRepository users, MessageSource messageSource) {
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.users = users;
+        this.messageSource = messageSource;
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthenticationResponse> login(@Valid @RequestBody AuthenticationRequest data) {
         try {
+
+            System.out.println(data);
             String email = data.getEmail();
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, data.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            String token = jwtTokenProvider.createToken(email);
+            String token = jwtTokenProvider.createToken(email,this.users.findByEmail(email)
+                    .orElseThrow(() -> new UsernameNotFoundException(messageSource.getMessage("authController.invalidCredentials", null, null)))
+                    .getRoles());
             AuthenticationResponse response = new AuthenticationResponse(email, token);
             return ok(response);
         } catch (AuthenticationException ex) {
             throw new BadCredentialsException(messageSource.getMessage("authController.invalidCredentials", null, null));
         }
     }
-}
+    }
