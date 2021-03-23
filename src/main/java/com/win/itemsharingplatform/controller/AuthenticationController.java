@@ -36,11 +36,10 @@ public class AuthenticationController {
     private final  UserRepository userRepository;
     private final UserService userService;
     private final EmailSender emailSender;
-    private final RegistrationService registrationService;
 
     @Autowired
     public AuthenticationController(
-            AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserRepository users, MessageSource messageSource, UserRepository userRepository, UserService userService, EmailSender emailSender, RegistrationService registrationService) {
+            AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserRepository users, MessageSource messageSource, UserRepository userRepository, UserService userService, EmailSender emailSender) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.users = users;
@@ -48,35 +47,28 @@ public class AuthenticationController {
         this.userRepository = userRepository;
         this.userService = userService;
         this.emailSender = emailSender;
-        this.registrationService = registrationService;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> login(@Valid @RequestBody AuthenticationRequest data) {
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest data) {
         try {
 
-            System.out.println(data);
             String email = data.getEmail();
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, data.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String token = jwtTokenProvider.createToken(email,this.users.findByEmail(email)
                     .orElseThrow(() -> new UsernameNotFoundException(messageSource.getMessage("authController.invalidCredentials", null, null)))
                     .getRoles());
+            System.out.println(token);
             AuthenticationResponse response = new AuthenticationResponse(email, token);
             return ok(response);
         }catch (DisabledException ex){
             User user = userRepository.findByEmail(data.getEmail()).get();
             String token = userService.tokenGeneration(userRepository.findByEmail(data.getEmail()).get());
             emailSender.generateLinkAndSend(user,token);
-            throw new BadCredentialsException("You are registered but you haven't confirmed your email, sending a new confirmation email..");
+            throw new BadCredentialsException(messageSource.getMessage("authController.notConfirmedEmail", null, null));
         }
         catch (AuthenticationException ex) {
             throw new BadCredentialsException(messageSource.getMessage("authController.invalidCredentials", null, null));}
-//        } catch (AuthenticationException ex)
-//        {
-//            System.out.println(ex);
-//            throw new BadCredentialsException(messageSource.getMessage("authController.invalidCredentials", null, null));
-//        }
-
     }
 }

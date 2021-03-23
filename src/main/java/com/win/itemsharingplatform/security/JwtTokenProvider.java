@@ -14,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static io.jsonwebtoken.SignatureAlgorithm.HS256;
+
 @Component
 public class JwtTokenProvider {
 
@@ -39,15 +41,15 @@ public class JwtTokenProvider {
         this.userService = userService;
         this.messageSource = messageSource;
     }
+
     @PostConstruct
     protected void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String username, List<String> roles) {
-        Claims claims = Jwts.claims().setSubject(username);
+    public String createToken(String email, List<String> roles) {
+        Claims claims = Jwts.claims().setSubject(email);
         claims.put("roles", roles);
-
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
