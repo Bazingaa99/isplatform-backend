@@ -1,17 +1,17 @@
 package com.win.itemsharingplatform.controller;
 
+import com.win.itemsharingplatform.model.User;
 import com.win.itemsharingplatform.model.request.AuthenticationRequest;
 import com.win.itemsharingplatform.model.response.AuthenticationResponse;
+import com.win.itemsharingplatform.repository.EmailSender;
 import com.win.itemsharingplatform.repository.UserRepository;
 import com.win.itemsharingplatform.security.JwtTokenProvider;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.win.itemsharingplatform.service.RegistrationService;
+import com.win.itemsharingplatform.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,15 +33,22 @@ public class AuthenticationController {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository users;
     private final MessageSource messageSource;
-
+    private final  UserRepository userRepository;
+    private final UserService userService;
+    private final EmailSender emailSender;
+    private final RegistrationService registrationService;
 
     @Autowired
     public AuthenticationController(
-            AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserRepository users, MessageSource messageSource) {
+            AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserRepository users, MessageSource messageSource, UserRepository userRepository, UserService userService, EmailSender emailSender, RegistrationService registrationService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.users = users;
         this.messageSource = messageSource;
+        this.userRepository = userRepository;
+        this.userService = userService;
+        this.emailSender = emailSender;
+        this.registrationService = registrationService;
     }
 
     @PostMapping("/login")
@@ -57,8 +64,19 @@ public class AuthenticationController {
                     .getRoles());
             AuthenticationResponse response = new AuthenticationResponse(email, token);
             return ok(response);
-        } catch (AuthenticationException ex) {
-            throw new BadCredentialsException(messageSource.getMessage("authController.invalidCredentials", null, null));
+        }catch (DisabledException ex){
+            User user = userRepository.findByEmail(data.getEmail()).get();
+            String token = userService.tokenGeneration(userRepository.findByEmail(data.getEmail()).get());
+            emailSender.generateLinkAndSend(user,token);
+            throw new BadCredentialsException("You are registered but you haven't confirmed your email, sending a new confirmation email..");
         }
+        catch (AuthenticationException ex) {
+            throw new BadCredentialsException(messageSource.getMessage("authController.invalidCredentials", null, null));}
+//        } catch (AuthenticationException ex)
+//        {
+//            System.out.println(ex);
+//            throw new BadCredentialsException(messageSource.getMessage("authController.invalidCredentials", null, null));
+//        }
+
     }
-    }
+}
