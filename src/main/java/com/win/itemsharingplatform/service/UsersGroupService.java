@@ -27,8 +27,8 @@ public class UsersGroupService {
         return usersGroupRepository.findAll();
     }
 
-    public List<UsersGroup> findUsersGroupsByUserId(Long userId){
-        return usersGroupRepository.findUsersGroupsByUserId(userId);
+    public List<UsersGroup> findUsersGroupsByUserId(Long admin_id){
+        return usersGroupRepository.findUsersGroupsByAdminId(admin_id);
     }
 
     public UsersGroup updateUsersGroup(UsersGroup usersGroup) {

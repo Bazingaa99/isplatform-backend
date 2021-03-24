@@ -10,8 +10,8 @@ public class UsersGroup implements Serializable {
     @Column(nullable = false, updatable = false)
     private Long id;
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false, updatable = false)
-    private Long admin_id;
+    @Column(nullable = false, updatable = false, name = "admin_id")
+    private Long adminId;
     private String name;
     private String description;
     @Column(nullable = false, updatable = false)
@@ -24,7 +24,7 @@ public class UsersGroup implements Serializable {
     }
 
     public UsersGroup(Long admin_id, String name, String description, String GroupCode) {
-        this.admin_id = admin_id;
+        this.adminId = admin_id;
         this.name = name;
         this.description = description;
         this.groupCode = GroupCode;
@@ -39,11 +39,11 @@ public class UsersGroup implements Serializable {
     }
 
     public Long getAdmin_id() {
-        return admin_id;
+        return adminId;
     }
 
     public void setAdmin_id(Long admin_id) {
-        this.admin_id = admin_id;
+        this.adminId = admin_id;
     }
 
     public String getName() {

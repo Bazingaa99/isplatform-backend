@@ -12,8 +12,9 @@ public interface UsersGroupRepository extends JpaRepository<UsersGroup, Long> {
 
     Optional<UsersGroup> findUsersGroupById(Long id);
 
-    @Query(value = "SELECT * " +
-            "FROM users_group ug, user_has_groups uhg " +
-            "WHERE uhg.user_id = :userId AND ug.id = uhg.group_id", nativeQuery = true)
-    List<UsersGroup> findUsersGroupsByUserId(Long userId);
+
+//    @Query(value = "SELECT * " +
+//            "FROM users_group ug , user_has_groups uhg " +
+//            "WHERE uhg.user_id = :userId AND ug.id = uhg.group_id", nativeQuery = true)
+    List<UsersGroup> findUsersGroupsByAdminId(Long admin_id);
 }

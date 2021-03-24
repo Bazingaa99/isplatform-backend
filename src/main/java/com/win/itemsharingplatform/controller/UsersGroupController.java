@@ -31,7 +31,7 @@ public class UsersGroupController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<UsersGroup> creaeteUsersGroup(@RequestBody UsersGroup usersGroup) {
+    public ResponseEntity<UsersGroup> createUsersGroup(@RequestBody UsersGroup usersGroup) {
         UsersGroup newUsersGroup = usersGroupService.createUsersGroup(usersGroup);
         return new ResponseEntity<>(newUsersGroup, HttpStatus.CREATED);
     }
@@ -48,9 +48,9 @@ public class UsersGroupController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/find/user/groups/{userId}")
-    public ResponseEntity<List<UsersGroup>> usersGroup(@PathVariable("userId") Long userId){
-        List<UsersGroup> groups = usersGroupService.findUsersGroupsByUserId(userId);
+    @GetMapping("/find/user/groups/{admin_id}")
+    public ResponseEntity<List<UsersGroup>> getUserGroups(@PathVariable("admin_id") Long admin_id){
+        List<UsersGroup> groups = usersGroupService.findUsersGroupsByUserId(admin_id);
         return new ResponseEntity<>(groups, HttpStatus.OK);
     }
 
