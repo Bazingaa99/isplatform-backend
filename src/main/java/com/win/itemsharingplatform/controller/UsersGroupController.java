@@ -1,6 +1,7 @@
 package com.win.itemsharingplatform.controller;
 
 import com.win.itemsharingplatform.model.UsersGroup;
+import com.win.itemsharingplatform.service.UserService;
 import com.win.itemsharingplatform.service.UsersGroupService;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
@@ -13,9 +14,11 @@ import java.util.List;
 @RequestMapping("/usersgroup")
 public class UsersGroupController {
     private final UsersGroupService usersGroupService;
+    private final UserService userService;
 
-    public UsersGroupController(UsersGroupService usersGroupService) {
+    public UsersGroupController(UsersGroupService usersGroupService, UserService userService) {
         this.usersGroupService = usersGroupService;
+        this.userService = userService;
     }
 
     @GetMapping("/all")
@@ -48,9 +51,10 @@ public class UsersGroupController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/find/user/groups/{admin_id}")
-    public ResponseEntity<List<UsersGroup>> getUserGroups(@PathVariable("admin_id") Long admin_id){
-        List<UsersGroup> groups = usersGroupService.findUsersGroupsByUserId(admin_id);
+    @GetMapping("/find/user/groups/{email}")
+    public ResponseEntity<List<UsersGroup>> getUserGroups(@PathVariable("email") String email){
+        Long userId = userService.getUserByEmail(email).getId();
+        List<UsersGroup> groups = usersGroupService.findUsersGroupsByAdminId(userId);
         return new ResponseEntity<>(groups, HttpStatus.OK);
     }
 

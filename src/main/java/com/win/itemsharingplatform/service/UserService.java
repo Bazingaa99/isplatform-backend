@@ -54,4 +54,7 @@ public class UserService implements UserDetailsService {
         return token;
     }
 
+    public User getUserByEmail(String email){
+        return userRepository.findByEmail(email).orElseThrow(() -> new EmailNotFoundException(String.format(EMAIL_NOT_FOUND_MSG, email)));
+    }
 }
