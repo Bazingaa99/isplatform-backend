@@ -1,6 +1,8 @@
 package com.win.itemsharingplatform.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -11,8 +13,11 @@ public class UsersGroup implements Serializable {
     private Long id;
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, updatable = false, name = "admin_id")
+    @NotBlank(message = "Please provide a Group Name.")
+    @Size(max = 30, message = "Please provide a shorter group name.")
     private Long adminId;
     private String name;
+    @Size(max = 100, message = "Please provide a shorter description.")
     private String description;
     @Column(nullable = false, updatable = false)
     private String groupCode;
