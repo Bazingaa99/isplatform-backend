@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -35,7 +36,7 @@ public class ItemController {
     }
 
     @PostMapping("/add/")
-    public ResponseEntity<Item> addItem(@RequestBody ItemRequest itemRequest) {
+    public ResponseEntity<Item> addItem(@Valid @RequestBody ItemRequest itemRequest) {
         Long userId = userService.getUserByEmail(itemRequest.getEmail()).getId();
         itemRequest.getItem().setOwner(new User(userId));
         Item newItem = itemService.addItem(itemRequest.getItem());

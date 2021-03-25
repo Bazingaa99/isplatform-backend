@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.sql.Date;
 
@@ -27,15 +28,23 @@ public class Item implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name="category_id", referencedColumnName = "id",  nullable = false)
+    @NotNull(message = "Please select a category.")
     private Category category;
 
     @Column(name = "name", nullable = false)
+    @NotBlank(message = "Please provide a title.")
+    @Size(max = 50, message = "Please provide a shorter title.")
     private String name;
 
     @Column(name = "description")
+    @NotBlank(message = "Please provide a description.")
+    @Size(max = 1000, message = "Please provide a shorter description.")
     private String description;
 
     @Column(name = "duration", nullable = false)
+    @NotNull(message = "Please provide a duration.")
+    @Min(value = 1, message="You have to lend the item at least for a day.")
+    @Max(value = 180, message = "You can lend the item for a maximum of 180 days.")
     private int duration;
 
     @Column(name = "picture_id")
