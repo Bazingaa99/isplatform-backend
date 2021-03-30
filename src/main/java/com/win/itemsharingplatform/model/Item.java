@@ -23,6 +23,7 @@ public class Item implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name="group_id", referencedColumnName = "id", nullable = false)
+    @NotNull(message = "Please select a group.")
     private UsersGroup group;
 
     @ManyToOne(fetch = FetchType.LAZY)

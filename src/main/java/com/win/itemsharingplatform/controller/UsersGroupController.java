@@ -1,6 +1,8 @@
 package com.win.itemsharingplatform.controller;
 
+import com.win.itemsharingplatform.model.User;
 import com.win.itemsharingplatform.model.UsersGroup;
+import com.win.itemsharingplatform.model.request.UsersGroupRequest;
 import com.win.itemsharingplatform.service.UserService;
 import com.win.itemsharingplatform.service.UsersGroupService;
 import org.apache.coyote.Response;
@@ -8,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -34,8 +37,10 @@ public class UsersGroupController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<UsersGroup> createUsersGroup(@RequestBody UsersGroup usersGroup) {
-        UsersGroup newUsersGroup = usersGroupService.createUsersGroup(usersGroup);
+    public ResponseEntity<UsersGroup> createUsersGroup(@Valid @RequestBody UsersGroupRequest usersGroupRequest) {
+        Long userId = userService.getUserByEmail(usersGroupRequest.getEmail()).getId();
+        usersGroupRequest.getUsersGroup().setAdmin_id(userId);
+        UsersGroup newUsersGroup = usersGroupService.createUsersGroup(usersGroupRequest.getUsersGroup());
         return new ResponseEntity<>(newUsersGroup, HttpStatus.CREATED);
     }
 

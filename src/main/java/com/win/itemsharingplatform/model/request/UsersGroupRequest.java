@@ -1,21 +1,19 @@
 package com.win.itemsharingplatform.model.request;
 
-
-import com.win.itemsharingplatform.model.Item;
+import com.win.itemsharingplatform.model.UsersGroup;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
-import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemRequest implements Serializable {
+public class UsersGroupRequest {
     @Valid
-    private Item item;
+    private UsersGroup usersGroup;
 
     @Email(message = "email address is not valid")
     private String email;
