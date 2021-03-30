@@ -12,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/auth/registration")
 @AllArgsConstructor
@@ -19,7 +21,7 @@ public class RegistrationController {
 
     final private RegistrationService registrationService;
     @PostMapping
-    public ResponseEntity register(@RequestBody RegistrationRequest request) throws UserException {
+    public ResponseEntity register(@Valid @RequestBody RegistrationRequest request) throws UserException {
         registrationService.register(request);
         return new ResponseEntity<>(HttpStatus.CREATED) ;
     }
