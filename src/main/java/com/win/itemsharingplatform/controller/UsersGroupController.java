@@ -91,15 +91,16 @@ public class UsersGroupController {
             return new AddToGroupResponse("Your invitation has expired");
         }
         User user= userService.getUserByEmail(addToGroupRequest.getEmail());
-        try {
-            userHasGroupsService.findByGroupAndUser(groupToken.getUsersGroup().getId(),user.getId());
+
+        if(!userHasGroupsService.findByGroupAndUser(groupToken.getUsersGroup().getId(),user.getId())){
             UserHasGroups userHasGroups = new UserHasGroups(user,groupToken.getUsersGroup());
             System.out.println(userHasGroups.toString());
             userHasGroupsService.saveUserHasGroups(userHasGroups);
             return new AddToGroupResponse("You have successfully added to the group");
-        }catch (NonUniqueResultException e){
+        }else{
             return new AddToGroupResponse("You are already in this group");
         }
+
 
     }
 
