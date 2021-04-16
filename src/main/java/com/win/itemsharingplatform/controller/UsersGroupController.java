@@ -50,9 +50,11 @@ public class UsersGroupController {
 
     @PostMapping("/create")
     public ResponseEntity<UsersGroup> createUsersGroup(@Valid @RequestBody UsersGroupRequest usersGroupRequest) {
-        Long userId = userService.getUserByEmail(usersGroupRequest.getEmail()).getId();
-        usersGroupRequest.getUsersGroup().setAdmin_id(userId);
+        User user = userService.getUserByEmail(usersGroupRequest.getEmail());
+        usersGroupRequest.getUsersGroup().setAdmin_id(user.getId());
         UsersGroup newUsersGroup = usersGroupService.createUsersGroup(usersGroupRequest.getUsersGroup());
+        UserHasGroups newUserHasGroups = new UserHasGroups(user, newUsersGroup);
+        userHasGroupsService.saveUserHasGroups(newUserHasGroups);
         return new ResponseEntity<>(newUsersGroup, HttpStatus.CREATED);
     }
 
