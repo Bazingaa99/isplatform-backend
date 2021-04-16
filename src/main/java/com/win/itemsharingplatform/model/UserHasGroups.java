@@ -1,8 +1,11 @@
 package com.win.itemsharingplatform.model;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 import java.io.Serializable;
 @Entity
+@Getter
 public class UserHasGroups implements Serializable {
 
     @ManyToOne

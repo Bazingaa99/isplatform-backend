@@ -34,6 +34,7 @@ public class UsersGroupService {
     public Optional<UsersGroup> findGroupByGroupId(Long groupId) {
         return usersGroupRepository.findUsersGroupById(groupId);
     }
+
     public List<UsersGroup> findAllUsersGroups() {
         return usersGroupRepository.findAll();
     }

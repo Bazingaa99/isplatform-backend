@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.NonUniqueResultException;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -72,10 +73,15 @@ public class UsersGroupController {
 
     @GetMapping("/find/user/groups/{email}")
     public ResponseEntity<List<UsersGroup>> getUserGroups(@PathVariable("email") String email){
-        Long userId = userService.getUserByEmail(email).getId();
-        List<UsersGroup> groups = usersGroupService.findUsersGroupsByAdminId(userId);
+        User user = userService.getUserByEmail(email);
+        List<UserHasGroups> userHasGroups = userHasGroupsService.findGroupsByUser(user);
+        List<UsersGroup> groups = new ArrayList<>();
+        for(int i=0; i<userHasGroups.size(); i++){
+            groups.add(userHasGroups.get(i).getGroup());
+        }
         return new ResponseEntity<>(groups, HttpStatus.OK);
     }
+
     @GetMapping("/generate-token/{groupId}&{email}")
     public GroupTokenResponse getLink(@PathVariable("groupId") Long groupId, @PathVariable("email") String email){
         Long userId = userService.getUserByEmail(email).getId();
