@@ -49,6 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.PUT, "/usersgroup/add-to-group").authenticated()
+                .antMatchers(HttpMethod.GET, "/usersgroup/generate-link/*").authenticated()
                 .antMatchers(HttpMethod.POST, "/auth/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/auth/registration").permitAll()
                 .antMatchers(HttpMethod.GET, "/auth/confirm").permitAll()
