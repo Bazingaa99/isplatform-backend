@@ -1,14 +1,11 @@
 package com.win.itemsharingplatform.controller;
 
-import com.win.itemsharingplatform.model.Item;
 import com.win.itemsharingplatform.model.Request;
 import com.win.itemsharingplatform.model.User;
-import com.win.itemsharingplatform.model.request.ItemRequest;
 import com.win.itemsharingplatform.model.request.ItemRequestRequest;
 import com.win.itemsharingplatform.service.RequestService;
 import com.win.itemsharingplatform.service.UserService;
 import lombok.AllArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,5 +40,16 @@ public class RequestController {
         itemRequestRequest.getRequest().setRequester(new User(userId));
         Request newRequest = requestService.addRequest(itemRequestRequest.getRequest());
         return new ResponseEntity<>(newRequest, HttpStatus.CREATED);
+    }
+
+    @GetMapping("exists/{itemId}&{email}")
+    public Boolean checkIfRequestExists(@PathVariable("itemId") Long itemId, @PathVariable("email") String email){
+        Long requesterId = userService.getUserByEmail(email).getId();
+        return requestService.findRequestByItemIdAndRequesterId(itemId, requesterId);
+    }
+
+    @DeleteMapping("delete/{requestId}")
+    public void deleteRequest(@PathVariable("requestId") Long requestId){
+        requestService.deleteRequest(requestId);
     }
 }

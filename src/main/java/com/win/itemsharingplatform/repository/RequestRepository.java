@@ -14,7 +14,8 @@ import java.util.Optional;
 
 @Repository
 public interface RequestRepository extends JpaRepository<Request, Long> {
-    void deleteItemById(Long id);
+    @Transactional
+    void deleteRequestById(Long id);
 
     Optional<Request> findItemById(Long id);
 
@@ -24,4 +25,6 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
                    " FROM request join item on item.id = request.item_id " +
                    " WHERE item.owner_id = :ownerId AND request.accepted = :accepted", nativeQuery = true)
     List<Request> findRequestsByUserIdAndAccepted(Long ownerId, boolean accepted);
+
+    Boolean existsRequestByItemIdAndRequesterId(Long itemId, Long requesterId);
 }
