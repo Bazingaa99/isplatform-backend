@@ -3,9 +3,6 @@ package com.win.itemsharingplatform.service;
 import com.win.itemsharingplatform.exception.RequestExistsException;
 import com.win.itemsharingplatform.model.Request;
 import com.win.itemsharingplatform.repository.RequestRepository;
-import com.win.itemsharingplatform.repository.UserRepository;
-import com.win.itemsharingplatform.repository.UsersGroupRepository;
-import lombok.ast.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +25,12 @@ public class RequestService {
         }
     }
 
+    public List<Request> findRequestsByOwnerIdAndResponded(Long userId, boolean responded){
+        return requestRepository.findRequestsByUserIdAndResponded(userId, responded);
+    }
+    public List<Request> findRequestsByRequesterIdAndResponded(Long userId, boolean responded){
+        return requestRepository.findRequestsByRequesterIdAndResponded(userId, responded);
+    }
     public List<Request> findRequestsByOwnerIdAndAccepted(Long userId, boolean isAccepted){
         return requestRepository.findRequestsByUserIdAndAccepted(userId, isAccepted);
     }
@@ -43,5 +46,12 @@ public class RequestService {
     public void deleteRequest(Long requestId){
         requestRepository.deleteRequestById(requestId);
     }
+
+    public void updateAcceptanceStatus(Long requestId, Boolean isAccepted){
+        requestRepository.updateResponseStatus(requestId,true);
+        requestRepository.updateAcceptanceStatus(requestId, isAccepted);
+    }
+
+    public Request findRequestById(Long requestId){return requestRepository.findRequestById(requestId).get();}
 
 }

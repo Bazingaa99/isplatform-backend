@@ -3,6 +3,7 @@ package com.win.itemsharingplatform.controller;
 import com.win.itemsharingplatform.model.Request;
 import com.win.itemsharingplatform.model.User;
 import com.win.itemsharingplatform.model.request.ItemRequestRequest;
+import com.win.itemsharingplatform.model.request.ResponseToRequest;
 import com.win.itemsharingplatform.service.RequestService;
 import com.win.itemsharingplatform.service.UserService;
 import lombok.AllArgsConstructor;
@@ -33,6 +34,18 @@ public class RequestController {
         List<Request> requests = requestService.findRequestsByRequesterIdAndAccepted(requesterId, isAccepted);
         return new ResponseEntity<>(requests, HttpStatus.OK);
     }
+    @GetMapping("/notRespondedByOwner/{email}")
+    public ResponseEntity<List<Request>> getNotRespondedRequestsByOwnerEmail (@PathVariable("email") String email) {
+        Long ownerId = userService.getUserByEmail(email).getId();
+        List<Request> requests = requestService.findRequestsByOwnerIdAndResponded(ownerId, false);
+        return new ResponseEntity<>(requests, HttpStatus.OK);
+    }
+    @GetMapping("/notRespondedByRequester/{email}")
+    public ResponseEntity<List<Request>> getNotRespondedRequestsByRequesterEmail (@PathVariable("email") String email) {
+        Long requesterId = userService.getUserByEmail(email).getId();
+        List<Request> requests = requestService.findRequestsByRequesterIdAndResponded(requesterId, false );
+        return new ResponseEntity<>(requests, HttpStatus.OK);
+    }
 
     @PostMapping("add")
     public ResponseEntity<Request> addRequest(@RequestBody ItemRequestRequest itemRequestRequest){
@@ -51,5 +64,11 @@ public class RequestController {
     @DeleteMapping("delete/{requestId}")
     public void deleteRequest(@PathVariable("requestId") Long requestId){
         requestService.deleteRequest(requestId);
+    }
+
+    @PutMapping("update-acceptance")
+    public void updateAcceptance(@RequestBody ResponseToRequest responseToRequest){
+
+        requestService.updateAcceptanceStatus(responseToRequest.getRequestId(),true);
     }
 }

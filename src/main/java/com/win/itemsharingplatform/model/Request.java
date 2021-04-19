@@ -26,8 +26,11 @@ public class Request implements Serializable {
     @JoinColumn(name = "requester_id", referencedColumnName = "id", nullable = false)
     private User requester;
 
-    @Column(name = "accepted")
+    @Column(name = "accepted",columnDefinition = "boolean")
     private boolean accepted = false;
+
+    @Column(name = "responded",columnDefinition = "boolean")
+    private boolean responded = false;
 
     @Column(name = "returned")
     private boolean returned = false;
