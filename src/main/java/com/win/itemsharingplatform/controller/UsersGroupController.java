@@ -1,5 +1,6 @@
 package com.win.itemsharingplatform.controller;
 
+import com.win.itemsharingplatform.exception.UserNotFoundException;
 import com.win.itemsharingplatform.model.GroupToken;
 import com.win.itemsharingplatform.model.User;
 import com.win.itemsharingplatform.model.UserHasGroups;
@@ -84,11 +85,12 @@ public class UsersGroupController {
 
     @GetMapping("/generate-token/{groupId}&{email}")
     public GroupTokenResponse getLink(@PathVariable("groupId") Long groupId, @PathVariable("email") String email){
-        Long userId = userService.getUserByEmail(email).getId();
+        if(userService.findUsersByGroupIdAndUserId(groupId,userService.getUserByEmail(email).getId())){
+            UsersGroup group = usersGroupService.findGroupByGroupId(groupId).get();
+            String token = groupTokenService.generateToken(group);
+            return new GroupTokenResponse(token);
+        }else throw new UserNotFoundException("There is no such user in the group");
 
-        UsersGroup group = usersGroupService.findGroupByGroupId(groupId).get();
-        String token = groupTokenService.generateToken(group);
-        return new GroupTokenResponse(token);
     }
     @PostMapping("/add-to-group")
     public AddToGroupResponse addToTheGroup(@RequestBody AddToGroupRequest addToGroupRequest){
@@ -102,7 +104,6 @@ public class UsersGroupController {
 
         if(!userHasGroupsService.findByGroupAndUser(groupToken.getUsersGroup().getId(),user.getId())){
             UserHasGroups userHasGroups = new UserHasGroups(user,groupToken.getUsersGroup());
-            System.out.println(userHasGroups.toString());
             userHasGroupsService.saveUserHasGroups(userHasGroups);
             return new AddToGroupResponse("You have successfully added to the group");
         }else{
