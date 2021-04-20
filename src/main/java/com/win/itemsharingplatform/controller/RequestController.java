@@ -69,6 +69,6 @@ public class RequestController {
     @PutMapping("update-acceptance")
     public void updateAcceptance(@RequestBody ResponseToRequest responseToRequest){
 
-        requestService.updateAcceptanceStatus(responseToRequest.getRequestId(),true);
+        requestService.updateAcceptanceStatus(responseToRequest.getRequestId(),responseToRequest.getIsAccepted());
     }
 }
