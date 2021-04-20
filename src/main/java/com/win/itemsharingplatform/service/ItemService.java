@@ -20,7 +20,9 @@ public class ItemService {
         this.userRepository = userRepository;
     }
 
-    public Item addItem(Item item){
+    public Item addItem(Item item){ return itemRepository.save(item);
+    }
+    public Item updateItem(Item item)  {
         return itemRepository.save(item);
     }
 

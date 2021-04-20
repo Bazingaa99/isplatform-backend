@@ -3,6 +3,8 @@ package com.win.itemsharingplatform.controller;
 import com.win.itemsharingplatform.model.Item;
 import com.win.itemsharingplatform.model.User;
 import com.win.itemsharingplatform.model.request.ItemRequest;
+import com.win.itemsharingplatform.model.response.ItemUpdateResponse;
+import com.win.itemsharingplatform.repository.ItemRepository;
 import com.win.itemsharingplatform.service.ItemService;
 import com.win.itemsharingplatform.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -41,6 +43,16 @@ public class ItemController {
         itemRequest.getItem().setOwner(new User(userId));
         Item newItem = itemService.addItem(itemRequest.getItem());
         return new ResponseEntity<>(newItem, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/update/")
+    public ItemUpdateResponse updateItem(@Valid @RequestBody ItemRequest itemRequest) {
+        // checking if the item owner is the same person as the one that tries to update it
+        if(itemService.findItemById(itemRequest.getItem().getId()).getOwner() == userService.getUserByEmail(itemRequest.getEmail())) {
+            itemService.updateItem(itemRequest.getItem());
+            return new ItemUpdateResponse("Item successfully updated.");
+        }
+        return new ItemUpdateResponse("Identification of the owner has failed.");
     }
 
     @GetMapping("/find/group/{group_id}")

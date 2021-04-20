@@ -58,13 +58,16 @@ public class Item implements Serializable {
     @Column(name = "view_count")
     private int viewCount;
 
+    @Column(name = "is_hidden")
+    private boolean isHidden;
+
     public Item() {}
 
     public Item(Long id) {
         this.id = id;
     }
 
-    public Item(User owner, UsersGroup group, Category category, String name, String description, int duration, String pictureId, Date dateCreated, int viewCount){
+    public Item(User owner, UsersGroup group, Category category, String name, String description, int duration, String pictureId, Date dateCreated, int viewCount, boolean isHidden){
         this.owner = owner;
         this.group = group;
         this.category = category;
@@ -74,6 +77,7 @@ public class Item implements Serializable {
         this.pictureId = pictureId;
         this.dateCreated = dateCreated;
         this.viewCount = viewCount;
+        this.isHidden = isHidden;
     }
 
 //    public Item(String name, String description, int duration, String pictureId, int viewCount){
@@ -157,6 +161,13 @@ public class Item implements Serializable {
 
     public void setViewCount(int viewCount) {
         this.viewCount = viewCount;
+    }
+    public boolean getIsHidden() {
+        return isHidden;
+    }
+
+    public void setIsHidden(boolean isHidden) {
+        this.isHidden = isHidden;
     }
 
     @Override
