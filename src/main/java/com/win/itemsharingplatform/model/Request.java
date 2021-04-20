@@ -2,7 +2,6 @@ package com.win.itemsharingplatform.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
-import jdk.jfr.BooleanFlag;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
