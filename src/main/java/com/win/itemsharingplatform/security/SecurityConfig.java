@@ -60,6 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/isp/user/*").permitAll()
                 .antMatchers(HttpMethod.GET, "/usersgroup/*").permitAll()
                 .antMatchers(HttpMethod.PUT, "/usersgroup/*").permitAll()
+                .antMatchers(HttpMethod.POST, "/isp/request/*").authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider))
                 .and()

@@ -39,7 +39,7 @@ public class Item implements Serializable {
 
     @Column(name = "description")
     @NotBlank(message = "Please provide a description.")
-    @Size(max = 1000, message = "Please provide a shorter description.")
+    @Size(max=50, message="Please provide a shorter description.")
     private String description;
 
     @Column(name = "duration", nullable = false)

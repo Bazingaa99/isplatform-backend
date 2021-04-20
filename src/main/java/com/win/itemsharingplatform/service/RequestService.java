@@ -18,11 +18,12 @@ public class RequestService {
     }
 
     public Request addRequest(Request request){
-        if(!requestRepository.existsRequestByItemIdAndRequesterId(request.getItem().getId(), request.getRequester().getId())) {
-            return requestRepository.save(request);
-        }else{
-            throw new RequestExistsException("You have already requested this item.");
+        if(requestRepository.existsRequestByItemIdAndRequesterId(request.getItem().getId(), request.getRequester().getId())) {
+            Request r = requestRepository.findRequestByItemIdAndRequesterId(request.getItem().getId(), request.getRequester().getId());
+            requestRepository.deleteRequestById(r.getId());
         }
+
+        return requestRepository.save(request);
     }
 
     public List<Request> findRequestsByOwnerIdAndResponded(Long userId, boolean responded){
@@ -31,16 +32,16 @@ public class RequestService {
     public List<Request> findRequestsByRequesterIdAndResponded(Long userId, boolean responded){
         return requestRepository.findRequestsByRequesterIdAndResponded(userId, responded);
     }
-    public List<Request> findRequestsByOwnerIdAndAccepted(Long userId, boolean isAccepted){
-        return requestRepository.findRequestsByUserIdAndAccepted(userId, isAccepted);
+    public List<Request> findRequestsByOwnerIdAndAcceptedAndResponded(Long userId, boolean isAccepted, boolean isResponded){
+        return requestRepository.findRequestsByUserIdAndAcceptedAndResponded(userId, isAccepted, isResponded);
     }
 
     public List<Request> findRequestsByRequesterIdAndAccepted(Long userId, boolean isAccepted){
         return requestRepository.findRequestsByRequesterIdAndAccepted(userId, isAccepted);
     }
 
-    public Boolean findRequestByItemIdAndRequesterId(Long itemId, Long requesterId){
-        return requestRepository.existsRequestByItemIdAndRequesterId(itemId, requesterId);
+    public Request findRequestByItemIdAndRequesterId(Long itemId, Long requesterId){
+        return requestRepository.findRequestByItemIdAndRequesterId(itemId, requesterId);
     }
 
     public void deleteRequest(Long requestId){

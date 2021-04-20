@@ -21,10 +21,12 @@ public class RequestController {
     private final RequestService requestService;
     private final UserService userService;
 
-    @GetMapping("/for/{email}&{isAccepted}")
-    public ResponseEntity<List<Request>> getRequestsByOwnerEmail (@PathVariable("email") String email, @PathVariable("isAccepted") boolean isAccepted) {
+    @GetMapping("/for/{email}&{isAccepted}&{isResponded}")
+    public ResponseEntity<List<Request>> getRequestsByOwnerEmail (@PathVariable("email") String email,
+                                                                  @PathVariable("isAccepted") boolean isAccepted,
+                                                                  @PathVariable("isResponded") boolean isResponded) {
         Long ownerId = userService.getUserByEmail(email).getId();
-        List<Request> requests = requestService.findRequestsByOwnerIdAndAccepted(ownerId, isAccepted);
+        List<Request> requests = requestService.findRequestsByOwnerIdAndAcceptedAndResponded(ownerId, isAccepted, isResponded);
         return new ResponseEntity<>(requests, HttpStatus.OK);
     }
 
@@ -56,7 +58,7 @@ public class RequestController {
     }
 
     @GetMapping("exists/{itemId}&{email}")
-    public Boolean checkIfRequestExists(@PathVariable("itemId") Long itemId, @PathVariable("email") String email){
+    public Request findRequestByItemIdAndRequesterId(@PathVariable("itemId") Long itemId, @PathVariable("email") String email){
         Long requesterId = userService.getUserByEmail(email).getId();
         return requestService.findRequestByItemIdAndRequesterId(itemId, requesterId);
     }

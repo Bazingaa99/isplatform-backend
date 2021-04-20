@@ -45,7 +45,7 @@ public class ItemController {
 
     @GetMapping("/find/group/{group_id}")
     public ResponseEntity<List<Item>> getItemByGroupId (@PathVariable("group_id") Long groupId) {
-        List<Item> item  = itemService.findItemsByGroupId(groupId);
+        List<Item> item  = itemService.findItemsByGroupIdAndNotRespondedOrDeclined(groupId);
         return new ResponseEntity<>(item, HttpStatus.OK);
     }
 }
