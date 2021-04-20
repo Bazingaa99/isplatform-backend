@@ -33,7 +33,7 @@ public class ItemService {
                 .orElseThrow(() -> new ItemNotFoundException("Item by id (" + id + ") was not found"));
     }
 
-    public List<Item> findItemsByGroupId(Long groupId){
-        return itemRepository.findItemsByGroupId(groupId);
+    public List<Item> findItemsByGroupIdAndNotRespondedOrDeclined(Long groupId){
+        return itemRepository.findItemsByGroupIdAndNotRespondedOrDeclined(groupId);
     }
 }

@@ -25,8 +25,8 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
 
     @Query(value = " SELECT request.*" +
                    " FROM request join item on item.id = request.item_id " +
-                   " WHERE item.owner_id = :ownerId AND request.accepted = :accepted", nativeQuery = true)
-    List<Request> findRequestsByUserIdAndAccepted(Long ownerId, boolean accepted);
+                   " WHERE item.owner_id = :ownerId AND request.accepted = :accepted AND request.responded = :responded", nativeQuery = true)
+    List<Request> findRequestsByUserIdAndAcceptedAndResponded(Long ownerId, boolean accepted, boolean responded);
 
     Boolean existsRequestByItemIdAndRequesterId(Long itemId, Long requesterId);
 
@@ -36,6 +36,8 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
             " FROM request join item on item.id = request.item_id " +
             " WHERE item.owner_id = :ownerId AND request.responded = :responded", nativeQuery = true)
     List<Request> findRequestsByUserIdAndResponded(Long ownerId, Boolean responded);
+
+    Request findRequestByItemIdAndRequesterId(Long itemId, Long requesterId);
 
     @Transactional
     @Modifying
