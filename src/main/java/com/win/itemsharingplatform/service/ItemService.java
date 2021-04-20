@@ -36,4 +36,8 @@ public class ItemService {
     public List<Item> findItemsByGroupIdAndNotRespondedOrDeclined(Long groupId){
         return itemRepository.findItemsByGroupIdAndNotRespondedOrDeclined(groupId);
     }
+
+    public Item findItemByIdAndOwnerId(Long itemId, Long userId){
+        return itemRepository.findItemByIdAndOwnerId(itemId, userId);
+    }
 }

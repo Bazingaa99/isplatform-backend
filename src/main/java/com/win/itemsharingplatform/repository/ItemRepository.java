@@ -16,4 +16,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
                     "FROM item left join request on item.id = request.item_id " +
                     "WHERE item.group_id = :groupId AND ((request.responded = false OR (request.responded = true AND request.accepted = false)) OR request.item_id is null)", nativeQuery=true)
     List<Item> findItemsByGroupIdAndNotRespondedOrDeclined(Long groupId);
+
+    Item findItemByIdAndOwnerId(Long itemId, Long userId);
 }

@@ -1,9 +1,11 @@
 package com.win.itemsharingplatform.controller;
 
+import com.win.itemsharingplatform.exception.RequesterIsOwnerException;
 import com.win.itemsharingplatform.model.Request;
 import com.win.itemsharingplatform.model.User;
 import com.win.itemsharingplatform.model.request.ItemRequestRequest;
 import com.win.itemsharingplatform.model.request.ResponseToRequest;
+import com.win.itemsharingplatform.service.ItemService;
 import com.win.itemsharingplatform.service.RequestService;
 import com.win.itemsharingplatform.service.UserService;
 import lombok.AllArgsConstructor;
@@ -20,6 +22,7 @@ public class RequestController {
 
     private final RequestService requestService;
     private final UserService userService;
+    private final ItemService itemService;
 
     @GetMapping("/for/{email}&{isAccepted}&{isResponded}")
     public ResponseEntity<List<Request>> getRequestsByOwnerEmail (@PathVariable("email") String email,
@@ -52,9 +55,13 @@ public class RequestController {
     @PostMapping("add")
     public ResponseEntity<Request> addRequest(@RequestBody ItemRequestRequest itemRequestRequest){
         Long userId = userService.getUserByEmail(itemRequestRequest.getEmail()).getId();
-        itemRequestRequest.getRequest().setRequester(new User(userId));
-        Request newRequest = requestService.addRequest(itemRequestRequest.getRequest());
-        return new ResponseEntity<>(newRequest, HttpStatus.CREATED);
+        if(itemService.findItemByIdAndOwnerId(itemRequestRequest.getRequest().getItem().getId(), userId) == null){
+            itemRequestRequest.getRequest().setRequester(new User(userId));
+            Request newRequest = requestService.addRequest(itemRequestRequest.getRequest());
+            return new ResponseEntity<>(newRequest, HttpStatus.CREATED);
+        }else{
+            throw new RequesterIsOwnerException("Requester is owner.");
+        }
     }
 
     @GetMapping("exists/{itemId}&{email}")
