@@ -3,7 +3,6 @@ package com.win.itemsharingplatform.controller;
 import com.win.itemsharingplatform.model.Item;
 import com.win.itemsharingplatform.model.User;
 import com.win.itemsharingplatform.model.request.ItemRequest;
-import com.win.itemsharingplatform.model.response.ItemResponse;
 import com.win.itemsharingplatform.service.ItemService;
 import com.win.itemsharingplatform.service.UserService;
 import org.springframework.http.HttpStatus;
