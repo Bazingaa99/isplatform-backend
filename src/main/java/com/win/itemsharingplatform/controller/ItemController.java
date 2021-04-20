@@ -43,6 +43,23 @@ public class ItemController {
         return new ResponseEntity<>(newItem, HttpStatus.CREATED);
     }
 
+    @PutMapping("/update/")
+    public void updateItem(@Valid @RequestBody ItemRequest itemRequest) {
+        // checking if the item owner is the same person as the one that tries to update it
+        if(itemService.findItemById(itemRequest.getItem().getId()).getOwner() == userService.getUserByEmail(itemRequest.getEmail())) {
+            itemRequest.getItem().setOwner(itemService.findItemById(itemRequest.getItem().getId()).getOwner());
+            itemService.updateItem(itemRequest.getItem());
+        }
+    }
+
+    @DeleteMapping("/delete/{itemId}&{email}")
+    public void deleteItem(@PathVariable("itemId") Long itemId, @PathVariable("email") String userEmail) {
+        // checking if the item owner is the same person as the one that tries to update it
+        if(itemService.findItemById(itemId).getOwner()== userService.getUserByEmail(userEmail)) {
+            itemService.deleteItem(itemId);
+        }
+    }
+
     @GetMapping("/find/group/{group_id}")
     public ResponseEntity<List<Item>> getItemByGroupId (@PathVariable("group_id") Long groupId) {
         List<Item> item  = itemService.findItemsByGroupIdAndNotRespondedOrDeclined(groupId);

@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
-    void deleteItemById(Long id);
-
     Optional<Item> findItemById(Long id);
 
     @Query(value = "SELECT item.* " +
