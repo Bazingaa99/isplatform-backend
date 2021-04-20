@@ -4,6 +4,7 @@ import com.win.itemsharingplatform.exception.EmailNotFoundException;
 import com.win.itemsharingplatform.model.ConfirmationToken;
 import com.win.itemsharingplatform.model.User;
 import com.win.itemsharingplatform.repository.UserRepository;
+import com.win.itemsharingplatform.repository.UsersGroupRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,6 +22,7 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
+    private final UsersGroupRepository usersGroupRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -57,4 +59,9 @@ public class UserService implements UserDetailsService {
     public User getUserByEmail(String email){
         return userRepository.findByEmail(email).orElseThrow(() -> new EmailNotFoundException(String.format(EMAIL_NOT_FOUND_MSG, email)));
     }
+
+    public Boolean findUsersByGroupIdAndUserId(long groupId, long userId){
+        return userRepository.findIfUserExistsByIdAndUserId(groupId, userId).isPresent();
+    }
+
 }
