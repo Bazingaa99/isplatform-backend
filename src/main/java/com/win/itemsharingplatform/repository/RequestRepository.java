@@ -18,7 +18,12 @@ import java.util.Optional;
 public interface RequestRepository extends JpaRepository<Request, Long> {
     @Transactional
     void deleteRequestById(Long id);
+
+    @Transactional
+    void deleteRequestsByItemIdAndAccepted(Long id, boolean accepted);
+
     Optional<Request> findRequestById(Long requestId);
+
     Optional<Request> findItemById(Long id);
 
     List<Request> findRequestsByRequesterIdAndAccepted(Long requesterId, boolean accepted);
@@ -38,6 +43,15 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
     List<Request> findRequestsByUserIdAndResponded(Long ownerId, Boolean responded);
 
     Request findRequestByItemIdAndRequesterId(Long itemId, Long requesterId);
+
+
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Request r " +
+            "SET r.responded = true, r.accepted = false " +
+            "WHERE r.item.id = ?1 AND r.requester.id <> ?2")
+    void declineRequestsByItemIdAndNotRequesterId(Long itemId, Long requesterId);
 
     @Transactional
     @Modifying
