@@ -77,7 +77,10 @@ public class RequestController {
 
     @PutMapping("update-acceptance")
     public void updateAcceptance(@RequestBody ResponseToRequest responseToRequest){
-
+        Request request = requestService.findRequestById(responseToRequest.getRequestId());
         requestService.updateAcceptanceStatus(responseToRequest.getRequestId(),responseToRequest.getIsAccepted());
+        if(responseToRequest.getIsAccepted()){
+            requestService.deleteRequestsByItemIdAndAccepted(request.getItem().getId(), false);
+        }
     }
 }
