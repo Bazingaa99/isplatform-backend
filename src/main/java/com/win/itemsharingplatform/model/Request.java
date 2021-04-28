@@ -44,12 +44,17 @@ public class Request implements Serializable {
 
     @Column(name = "share_date")
     @DateTimeFormat
-    @NotNull
-    private LocalDateTime shareDate = LocalDateTime.now();
+    private LocalDateTime shareDate;
 
     @Column(name = "return_date")
     @DateTimeFormat
     private LocalDateTime returnDate;
+
+    public Request(Long id){
+        this.id = id;
+    }
+
+    public Request(){ }
 
     //public Request(Long id) {this.item = new Item(id);}
 }
