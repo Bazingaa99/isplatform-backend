@@ -59,7 +59,7 @@ public class Item implements Serializable {
     private int viewCount;
 
     @Column(name = "is_hidden")
-    private boolean isHidden;
+    private boolean isHidden = false;
 
     public Item() {}
 
