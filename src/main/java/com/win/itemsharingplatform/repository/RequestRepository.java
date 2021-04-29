@@ -22,7 +22,7 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
     @Transactional
     void deleteRequestsByItemIdAndAccepted(Long id, boolean accepted);
 
-    Optional<Request> findRequestById(Long requestId);
+    Request findRequestById(Long requestId);
 
     Optional<Request> findItemById(Long id);
 

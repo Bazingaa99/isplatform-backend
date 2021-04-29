@@ -15,4 +15,6 @@ public class ChatService {
     public Chat findChatByRequestId(Long requestId){return chatRepository.findChatByRequestId(requestId);}
 
     public Chat createChat(Chat chat){ return chatRepository.save(chat);}
+
+    public Chat findChatById(Long chatId) { return chatRepository.findChatById(chatId); }
 }

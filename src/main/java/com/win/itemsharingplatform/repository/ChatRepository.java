@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, Long> {
     Chat findChatByRequestId(Long requestId);
+
+    Chat findChatById(Long chatId);
 }

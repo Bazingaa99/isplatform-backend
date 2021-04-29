@@ -18,7 +18,7 @@ public class Request implements Serializable {
     @Column(nullable = false, updatable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "item_id", referencedColumnName = "id", nullable = false)
     @NotNull

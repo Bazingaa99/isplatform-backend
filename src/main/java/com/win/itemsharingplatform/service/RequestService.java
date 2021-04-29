@@ -59,6 +59,6 @@ public class RequestService {
         requestRepository.declineRequestsByItemIdAndNotRequesterId(itemId, requesterId);
     }
 
-    public Request findRequestById(Long requestId){return requestRepository.findRequestById(requestId).get();}
+    public Request findRequestById(Long requestId){return requestRepository.findRequestById(requestId);}
 
 }
