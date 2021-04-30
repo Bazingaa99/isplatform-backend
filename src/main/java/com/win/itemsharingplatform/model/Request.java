@@ -1,5 +1,6 @@
 package com.win.itemsharingplatform.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
 import lombok.Data;
@@ -49,6 +50,14 @@ public class Request implements Serializable {
     @Column(name = "return_date")
     @DateTimeFormat
     private LocalDateTime returnDate;
+
+    @OneToOne(fetch = FetchType.EAGER,
+            cascade = CascadeType.REMOVE,
+            mappedBy = "request")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonBackReference
+    @JoinColumn(name = "chat_id", referencedColumnName = "id")
+    private Chat chat;
 
     public Request(Long id){
         this.id = id;

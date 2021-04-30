@@ -5,6 +5,7 @@ import com.win.itemsharingplatform.model.Request;
 import com.win.itemsharingplatform.model.User;
 import com.win.itemsharingplatform.model.request.ItemRequestRequest;
 import com.win.itemsharingplatform.model.request.ResponseToRequest;
+import com.win.itemsharingplatform.service.ChatService;
 import com.win.itemsharingplatform.service.ItemService;
 import com.win.itemsharingplatform.service.RequestService;
 import com.win.itemsharingplatform.service.UserService;
@@ -23,6 +24,7 @@ public class RequestController {
     private final RequestService requestService;
     private final UserService userService;
     private final ItemService itemService;
+    private final ChatService chatService;
 
     @GetMapping("/for/{email}&{isAccepted}&{isResponded}")
     public ResponseEntity<List<Request>> getRequestsByOwnerEmail (@PathVariable("email") String email,

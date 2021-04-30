@@ -1,5 +1,6 @@
 package com.win.itemsharingplatform.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,7 +15,7 @@ public class Chat {
     @Column(nullable = false, updatable = false)
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "request_id", referencedColumnName = "id")
     @NotNull(message = "Provide a request id.")
     private Request request;

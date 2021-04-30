@@ -10,9 +10,9 @@ import java.util.Optional;
 public interface ItemRepository extends JpaRepository<Item, Long> {
     Optional<Item> findItemById(Long id);
 
-    @Query(value = "SELECT * FROM item WHERE item.id = (SELECT DISTINCT item.id " +
-                    "FROM item left join request on item.id = request.item_id " +
-                    "WHERE item.group_id = :groupId AND ((request.responded = false OR (request.responded = true AND request.accepted = false)) OR request.item_id is null))", nativeQuery=true)
+    @Query(value = "SELECT a.* FROM item as a WHERE a.id IS NOT NULL AND EXISTS (SELECT 1 " +
+                    "FROM item b left join request r on b.id = r.item_id " +
+                    "WHERE a.id = b.id AND b.group_id = :groupId AND ((r.responded = false OR (r.responded = true AND r.accepted = false)) OR r.item_id is null))", nativeQuery=true)
     List<Item> findItemsByGroupIdAndNotRespondedOrDeclined(Long groupId);
 
     Item findItemByIdAndOwnerId(Long itemId, Long userId);
