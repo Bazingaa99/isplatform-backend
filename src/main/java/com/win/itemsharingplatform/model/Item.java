@@ -2,6 +2,7 @@ package com.win.itemsharingplatform.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -48,8 +49,11 @@ public class Item implements Serializable {
     @Max(value = 180, message = "You can lend the item for a maximum of 180 days.")
     private int duration;
 
-    @Column(name = "picture_id")
-    private String pictureId;
+    @Lob
+    private byte[] image;
+
+    @Column(name = "image_name")
+    private String imageName;
 
     @Column(name = "date_created")
     @CreationTimestamp
@@ -67,17 +71,20 @@ public class Item implements Serializable {
         this.id = id;
     }
 
-    public Item(User owner, UsersGroup group, Category category, String name, String description, int duration, String pictureId, Date dateCreated, int viewCount, boolean isHidden){
+
+
+    public Item(User owner, UsersGroup group, Category category, String name, String description, int duration, byte[] image, Date dateCreated, int viewCount, boolean isHidden, String imageName){
         this.owner = owner;
         this.group = group;
         this.category = category;
         this.name = name;
         this.description = description;
         this.duration = duration;
-        this.pictureId = pictureId;
+        this.image = image;
         this.dateCreated = dateCreated;
         this.viewCount = viewCount;
         this.isHidden = isHidden;
+        this.imageName=imageName;
     }
 
 //    public Item(String name, String description, int duration, String pictureId, int viewCount){
@@ -139,12 +146,12 @@ public class Item implements Serializable {
         this.duration = duration;
     }
 
-    public String getPictureId() {
-        return pictureId;
+    public byte[] getImage() {
+        return image;
     }
 
-    public void setPictureId(String pictureId) {
-        this.pictureId = pictureId;
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public Date getDateCreated() {
@@ -173,5 +180,12 @@ public class Item implements Serializable {
     @Override
     public String toString() {
         return name + " | " + description;
+    }
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 }
