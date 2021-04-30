@@ -1,15 +1,19 @@
 package com.win.itemsharingplatform.controller;
 
+import com.win.itemsharingplatform.exception.InvalidFileException;
 import com.win.itemsharingplatform.model.Item;
 import com.win.itemsharingplatform.model.User;
 import com.win.itemsharingplatform.model.request.ItemRequest;
 import com.win.itemsharingplatform.service.ItemService;
 import com.win.itemsharingplatform.service.UserService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -42,6 +46,18 @@ public class ItemController {
         Item newItem = itemService.addItem(itemRequest.getItem());
         return new ResponseEntity<>(newItem, HttpStatus.CREATED);
     }
+    @PostMapping("/{id}/image")
+    public ResponseEntity<HttpStatus> addImageToItem(@PathVariable("id") Long id, @RequestParam("file") MultipartFile image) throws IOException, InvalidFileException {
+        System.out.println("lmao");
+        itemService.addAttachment(id, image);
+        return ResponseEntity.noContent().build();
+    }
+    @GetMapping(value = "/{id}/image/{filename}")
+    public ResponseEntity fetchImage(@PathVariable("id") Long id, @PathVariable("filename") String filename){
+        byte[] data = itemService.getAttachment(id, filename);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                String.format("attachment; filename=\"%s\"", filename)).body(data);
+    }
 
     @PutMapping("/update/")
     public void updateItem(@Valid @RequestBody ItemRequest itemRequest) {
@@ -65,4 +81,6 @@ public class ItemController {
         List<Item> item  = itemService.findItemsByGroupIdAndNotRespondedOrDeclined(groupId);
         return new ResponseEntity<>(item, HttpStatus.OK);
     }
+
+
 }
