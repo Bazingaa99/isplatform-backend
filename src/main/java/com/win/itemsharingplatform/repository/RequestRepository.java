@@ -44,8 +44,6 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
 
     Request findRequestByItemIdAndRequesterId(Long itemId, Long requesterId);
 
-
-
     @Transactional
     @Modifying
     @Query("UPDATE Request r " +

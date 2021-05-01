@@ -85,5 +85,11 @@ public class ItemService {
         return item.getImage();
     }
 
+    public void updateItemBookmarkCount(Long itemId, int value){
+        itemRepository.updateItemBookmarkCount(itemId, value);
+    }
 
+    public List<Item> findItemsBookmarkedByUser(Long userId){
+        return itemRepository.findItemsBookmarkedByUser(userId);
+    }
 }

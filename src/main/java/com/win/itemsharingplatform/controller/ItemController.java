@@ -1,11 +1,18 @@
 package com.win.itemsharingplatform.controller;
 
+import com.win.itemsharingplatform.exception.DoesNotExistException;
+import com.win.itemsharingplatform.exception.DuplicateBookmarkException;
 import com.win.itemsharingplatform.exception.InvalidFileException;
+import com.win.itemsharingplatform.exception.UserIsOwnerException;
 import com.win.itemsharingplatform.model.Item;
 import com.win.itemsharingplatform.model.User;
+import com.win.itemsharingplatform.model.UserHasBookmarks;
+import com.win.itemsharingplatform.model.request.ItemBookmarkRequest;
 import com.win.itemsharingplatform.model.request.ItemRequest;
 import com.win.itemsharingplatform.service.ItemService;
+import com.win.itemsharingplatform.service.UserHasBookmarksService;
 import com.win.itemsharingplatform.service.UserService;
+import lombok.Data;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +25,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/isp/items")
+@Data
 public class ItemController {
     private final ItemService itemService;
     private final UserService userService;
-
-    public ItemController(ItemService itemService, UserService userService) {
-        this.itemService = itemService;
-        this.userService = userService;
-    }
+    private final UserHasBookmarksService userHasBookmarksService;
 
     @GetMapping("/all/")
     public ResponseEntity<List<Item>> getAllItems () {
@@ -82,5 +86,41 @@ public class ItemController {
         return new ResponseEntity<>(item, HttpStatus.OK);
     }
 
+    @PostMapping("/bookmark")
+    public ResponseEntity<UserHasBookmarks> addUserHasBookmarks(@Valid @RequestBody ItemBookmarkRequest itemBookmarkRequest) throws UserIsOwnerException {
+        Item item = itemService.findItemById(itemBookmarkRequest.getItemId());
+        Long userId = userService.getUserByEmail(itemBookmarkRequest.getEmail()).getId();
+        UserHasBookmarks userHasBookmarks  = userHasBookmarksService.findUserHasBookmarksByUserIdAndItemId(userId, itemBookmarkRequest.getItemId());
+        if(userHasBookmarks == null){
+            if(!item.getOwner().getId().equals(userId)){
+                itemService.updateItemBookmarkCount(itemBookmarkRequest.getItemId(), 1);
+                UserHasBookmarks uhb = userHasBookmarksService.addUserHasBookmarks(new UserHasBookmarks(new User(userId), new Item(itemBookmarkRequest.getItemId())));
+                return new ResponseEntity<>(uhb, HttpStatus.CREATED);
+            }else{
+                throw new UserIsOwnerException("You can't bookmark your own item.");
+            }
+        }else{
+            throw new DuplicateBookmarkException("You have already bookmarked this item.");
+        }
+    }
 
+    @DeleteMapping("/delete/bookmark/{email}/{item_id}")
+    public void deleteUserHasBookmarks(@PathVariable("email") String email, @PathVariable("item_id") Long itemId){
+        Long userId = userService.getUserByEmail(email).getId();
+        UserHasBookmarks userHasBookmarks = userHasBookmarksService.findUserHasBookmarksByUserIdAndItemId(userId, itemId);
+        if(userHasBookmarks != null){
+            itemService.updateItemBookmarkCount(userHasBookmarks.getItem().getId(), -1);
+            userHasBookmarksService.deleteUserHasBookmarks(userHasBookmarks);
+        }else{
+            throw new DoesNotExistException("You haven't bookmarked this item.");
+        }
+
+    }
+
+    @GetMapping("/find/bookmarks/user/{email}")
+    public ResponseEntity<List<Item>> getUserHasBookmarksByUserId(@PathVariable("email") String email){
+        Long userId = userService.getUserByEmail(email).getId();
+        List<Item> items = itemService.findItemsBookmarkedByUser(userId);
+        return new ResponseEntity<>(items, HttpStatus.OK);
+    }
 }

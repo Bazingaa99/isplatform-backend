@@ -1,8 +1,8 @@
 package com.win.itemsharingplatform.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.sql.Date;
 
 @Entity
+@Data
 public class Item implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -65,127 +66,12 @@ public class Item implements Serializable {
     @Column(name = "is_hidden")
     private boolean isHidden = false;
 
+    @Column(name = "bookmark_count")
+    private int bookmarkCount = 0;
+
     public Item() {}
 
     public Item(Long id) {
         this.id = id;
-    }
-
-
-
-    public Item(User owner, UsersGroup group, Category category, String name, String description, int duration, byte[] image, Date dateCreated, int viewCount, boolean isHidden, String imageName){
-        this.owner = owner;
-        this.group = group;
-        this.category = category;
-        this.name = name;
-        this.description = description;
-        this.duration = duration;
-        this.image = image;
-        this.dateCreated = dateCreated;
-        this.viewCount = viewCount;
-        this.isHidden = isHidden;
-        this.imageName=imageName;
-    }
-
-//    public Item(String name, String description, int duration, String pictureId, int viewCount){
-//        this.name = name;
-//        this.description = description;
-//        this.duration = duration;
-//        this.viewCount = viewCount;
-//    }
-
-    public Long getId(){
-        return id;
-    }
-
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
-
-    public UsersGroup getGroup() {
-        return group;
-    }
-
-    public void setGroup(UsersGroup group) {
-        this.group = group;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
-
-    public Date getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(Date dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
-    public int getViewCount() {
-        return viewCount;
-    }
-
-    public void setViewCount(int viewCount) {
-        this.viewCount = viewCount;
-    }
-    public boolean getIsHidden() {
-        return isHidden;
-    }
-
-    public void setIsHidden(boolean isHidden) {
-        this.isHidden = isHidden;
-    }
-
-    @Override
-    public String toString() {
-        return name + " | " + description;
-    }
-    public String getImageName() {
-        return imageName;
-    }
-
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
     }
 }

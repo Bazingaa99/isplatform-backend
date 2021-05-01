@@ -1,7 +1,7 @@
 package com.win.itemsharingplatform.controller;
 
 import com.win.itemsharingplatform.exception.ChatAuthorizationException;
-import com.win.itemsharingplatform.exception.RequestDoesNotExistException;
+import com.win.itemsharingplatform.exception.DoesNotExistException;
 import com.win.itemsharingplatform.model.Chat;
 import com.win.itemsharingplatform.model.Message;
 import com.win.itemsharingplatform.model.Request;
@@ -49,7 +49,7 @@ public class ChatController {
             }
             return new ResponseEntity<>(c, HttpStatus.OK);
         }else{
-            throw new RequestDoesNotExistException("Can't open chat, because request does not exist.");
+            throw new DoesNotExistException("Can't open chat, because request does not exist.");
         }
 
     }
