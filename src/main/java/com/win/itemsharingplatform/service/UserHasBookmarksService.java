@@ -28,4 +28,8 @@ public class UserHasBookmarksService {
     public UserHasBookmarks findUserHasBookmarksByUserIdAndItemId(Long userId, Long itemId){
         return userHasBookmarksRepository.findUserHasBookmarksByUserIdAndItemId(userId, itemId);
     }
+
+    public Boolean existsUserHasBookmarksByUserIdAndItemId(Long userId, Long itemId){
+        return userHasBookmarksRepository.existsByUserIdAndItemId(userId, itemId);
+    }
 }

@@ -123,4 +123,11 @@ public class ItemController {
         List<Item> items = itemService.findItemsBookmarkedByUser(userId);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
+
+    @GetMapping("check/bookmark/{email}/{itemId}")
+    public ResponseEntity<Boolean> existsUserHasBookmarksByUserIdAndItemId(@PathVariable("email") String email, @PathVariable("itemId") Long itemId){
+        Long userId = userService.getUserByEmail(email).getId();
+        Boolean bookmarkExists = userHasBookmarksService.existsUserHasBookmarksByUserIdAndItemId(userId, itemId);
+        return new ResponseEntity<>(bookmarkExists, HttpStatus.OK);
+    }
 }

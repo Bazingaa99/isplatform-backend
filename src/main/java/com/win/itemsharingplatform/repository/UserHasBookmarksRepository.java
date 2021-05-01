@@ -11,4 +11,6 @@ public interface UserHasBookmarksRepository extends JpaRepository<UserHasBookmar
     List<UserHasBookmarks> findUserHasBookmarksByUserId(Long userId);
 
     UserHasBookmarks findUserHasBookmarksByUserIdAndItemId(Long userId, Long itemId);
+
+    Boolean existsByUserIdAndItemId(Long userId, Long itemId);
 }

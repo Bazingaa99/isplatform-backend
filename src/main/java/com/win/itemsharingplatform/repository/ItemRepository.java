@@ -26,7 +26,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
            " WHERE id = ?1")
     void updateItemBookmarkCount(Long itemId, int value);
 
-    @Query(value = " SELECT * FROM item WHERE item.is_hidden = false AND EXISTS (SELECT *" +
-                    "FROM user_has_bookmarks WHERE user_id = :userId)", nativeQuery = true)
+    @Query(value = " SELECT i.* FROM item i LEFT JOIN user_has_bookmarks uhb ON i.id = uhb.item_id LEFT JOIN request r ON i.id = r.item_id" +
+                   " WHERE i.is_hidden = false AND uhb.user_id = :userId AND (r.accepted = false OR r.item_id is null)", nativeQuery = true)
     List<Item> findItemsBookmarkedByUser(Long userId);
 }
