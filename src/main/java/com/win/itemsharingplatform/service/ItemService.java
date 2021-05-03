@@ -6,16 +6,13 @@ import com.win.itemsharingplatform.exception.ItemNotFoundException;
 import com.win.itemsharingplatform.model.Item;
 import com.win.itemsharingplatform.repository.ItemRepository;
 import com.win.itemsharingplatform.repository.UserRepository;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import org.apache.commons.io.FilenameUtils;
-
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -89,5 +86,11 @@ public class ItemService {
         return item.getImage();
     }
 
+    public void updateItemBookmarkCount(Long itemId, int value){
+        itemRepository.updateItemBookmarkCount(itemId, value);
+    }
 
+    public List<Item> findItemsBookmarkedByUser(Long userId){
+        return itemRepository.findItemsBookmarkedByUser(userId);
+    }
 }

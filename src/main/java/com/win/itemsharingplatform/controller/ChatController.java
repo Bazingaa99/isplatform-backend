@@ -1,6 +1,7 @@
 package com.win.itemsharingplatform.controller;
 
 import com.win.itemsharingplatform.exception.ChatAuthorizationException;
+import com.win.itemsharingplatform.exception.DoesNotExistException;
 import com.win.itemsharingplatform.model.Chat;
 import com.win.itemsharingplatform.model.Message;
 import com.win.itemsharingplatform.model.Request;
@@ -38,14 +39,19 @@ public class ChatController {
 
     @PostMapping("/add")
     public ResponseEntity<Chat> createChat(@Valid @RequestBody Chat chat) {
-        System.out.println(chat);
         Chat c = chatService.findChatByRequestId(chat.getRequest().getId());
-        if(c == null) {
-            Chat newChat = chatService.createChat(chat);
-            return new ResponseEntity<>(newChat, HttpStatus.CREATED);
+        Request r = requestService.findRequestById(chat.getRequest().getId());
+
+        if(r != null){
+            if(c == null) {
+                Chat newChat = chatService.createChat(chat);
+                return new ResponseEntity<>(newChat, HttpStatus.CREATED);
+            }
+            return new ResponseEntity<>(c, HttpStatus.OK);
+        }else{
+            throw new DoesNotExistException("Can't open chat, because request does not exist.");
         }
 
-        return new ResponseEntity<>(c, HttpStatus.OK);
     }
 
     @GetMapping("/request/{id}")
