@@ -10,6 +10,7 @@ import com.win.itemsharingplatform.model.UserHasBookmarks;
 import com.win.itemsharingplatform.model.request.ItemBookmarkRequest;
 import com.win.itemsharingplatform.model.request.ItemRequest;
 import com.win.itemsharingplatform.service.ItemService;
+import com.win.itemsharingplatform.service.RequestService;
 import com.win.itemsharingplatform.service.UserHasBookmarksService;
 import com.win.itemsharingplatform.service.UserService;
 import lombok.Data;
@@ -30,6 +31,7 @@ public class ItemController {
     private final ItemService itemService;
     private final UserService userService;
     private final UserHasBookmarksService userHasBookmarksService;
+    private final RequestService requestService;
 
     @GetMapping("/all/")
     public ResponseEntity<List<Item>> getAllItems () {
@@ -77,6 +79,8 @@ public class ItemController {
         // checking if the item owner is the same person as the one that tries to update it
         if(itemService.findItemById(itemId).getOwner()== userService.getUserByEmail(userEmail)) {
             itemService.deleteItem(itemId);
+            userHasBookmarksService.deleteUserHasBookmarksByItemId(itemId);
+            requestService.deleteRequestsByItemId(itemId);
         }
     }
 

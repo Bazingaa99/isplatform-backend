@@ -32,4 +32,8 @@ public class UserHasBookmarksService {
     public Boolean existsUserHasBookmarksByUserIdAndItemId(Long userId, Long itemId){
         return userHasBookmarksRepository.existsByUserIdAndItemId(userId, itemId);
     }
+
+    public void deleteUserHasBookmarksByItemId(Long itemId){
+        userHasBookmarksRepository.deleteByItemId(itemId);
+    }
 }

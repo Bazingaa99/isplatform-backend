@@ -1,6 +1,7 @@
 package com.win.itemsharingplatform.model;
 
 import lombok.Data;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

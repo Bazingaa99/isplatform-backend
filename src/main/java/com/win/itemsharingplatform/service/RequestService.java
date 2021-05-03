@@ -60,4 +60,8 @@ public class RequestService {
     }
 
     public Request findRequestById(Long requestId){return requestRepository.findRequestById(requestId);}
+
+    public void deleteRequestsByItemId(Long itemId){
+        requestRepository.deleteByItemId(itemId);
+    }
 }

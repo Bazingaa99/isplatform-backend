@@ -20,6 +20,12 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
     void deleteRequestById(Long id);
 
     @Transactional
+    @Modifying
+    @Query(value = "DELETE FROM request " +
+            "WHERE item_id = :itemId", nativeQuery = true)
+    void deleteByItemId(Long itemId);
+
+    @Transactional
     void deleteRequestsByItemIdAndAccepted(Long id, boolean accepted);
 
     Request findRequestById(Long requestId);
