@@ -21,7 +21,8 @@ import java.util.List;
 public class ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
-    private final List<String> allowedFileExtensions = Arrays.asList("img", "jpeg", "jpg","image/jpeg","image/png","PNG", "png");
+    private final List<String> allowedFileExtensions = Arrays.asList("img", "jpeg", "jpg","image/jpeg","image/png","PNG", "png","application/octet-stream");;
+
     @Autowired
     public ItemService(ItemRepository itemRepository, UserRepository userRepository) {
         this.itemRepository = itemRepository;
@@ -31,6 +32,7 @@ public class ItemService {
     public Item addItem(Item item){ return itemRepository.save(item);
     }
     public Item updateItem(Item item) {
+
         return itemRepository.save(item);
     }
 
@@ -66,7 +68,6 @@ public class ItemService {
             throw new InvalidFileException("Image resolution is too small");
         }
 
-        System.out.println(originalImage.getHeight()+" "+originalImage.getWidth());
         if  (!allowedFileExtensions.contains(extension))
             throw new InvalidFileException(extension);
 

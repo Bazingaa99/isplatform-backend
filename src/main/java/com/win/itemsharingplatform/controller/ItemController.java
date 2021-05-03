@@ -54,7 +54,6 @@ public class ItemController {
     }
     @PostMapping("/{id}/image")
     public ResponseEntity<HttpStatus> addImageToItem(@PathVariable("id") Long id, @RequestParam("file") MultipartFile image) throws IOException, InvalidFileException {
-        System.out.println("lmao");
         itemService.addAttachment(id, image);
         return ResponseEntity.noContent().build();
     }
@@ -68,8 +67,11 @@ public class ItemController {
     @PutMapping("/update/")
     public void updateItem(@Valid @RequestBody ItemRequest itemRequest) {
         // checking if the item owner is the same person as the one that tries to update it
-        if(itemService.findItemById(itemRequest.getItem().getId()).getOwner() == userService.getUserByEmail(itemRequest.getEmail())) {
+        Item oldItem = itemService.findItemById(itemRequest.getItem().getId());
+        if(oldItem.getOwner() == userService.getUserByEmail(itemRequest.getEmail())) {
             itemRequest.getItem().setOwner(itemService.findItemById(itemRequest.getItem().getId()).getOwner());
+            itemRequest.getItem().setImage(oldItem.getImage());
+            itemRequest.getItem().setImageName(oldItem.getImageName());
             itemService.updateItem(itemRequest.getItem());
         }
     }
