@@ -47,8 +47,8 @@ public class ItemService {
                 .orElseThrow(() -> new ItemNotFoundException("Item by id (" + id + ") was not found"));
     }
 
-    public List<Item> findItemsByGroupIdAndNotRespondedOrDeclined(Long groupId){
-        return itemRepository.findItemsByGroupIdAndNotRespondedOrDeclined(groupId);
+    public List<Item> findItemsByHiddenIsFalseAndAvailableIsTrue(Long groupId){
+        return itemRepository.findItemsByHiddenIsFalseAndAvailableIsTrue(groupId);
     }
 
     public Item findItemByIdAndOwnerId(Long itemId, Long userId){
@@ -92,5 +92,9 @@ public class ItemService {
 
     public List<Item> findItemsBookmarkedByUser(Long userId){
         return itemRepository.findItemsBookmarkedByUser(userId);
+    }
+
+    public void updateAvailableStatus(Long itemId, boolean available){
+        itemRepository.updateAvailableStatus(itemId, available);
     }
 }

@@ -82,7 +82,8 @@ public class RequestController {
         Request request = requestService.findRequestById(responseToRequest.getRequestId());
         requestService.updateAcceptanceStatus(responseToRequest.getRequestId(),responseToRequest.getIsAccepted());
         if(responseToRequest.getIsAccepted()){
-            requestService.deleteRequestsByItemIdAndAccepted(request.getItem().getId(), false);
+            requestService.deleteRequestsByItemIdAndAcceptedIsFalseAndReturnedIsFalse(request.getItem().getId());
+            itemService.updateAvailableStatus(request.getItem().getId(), false);
         }
     }
 

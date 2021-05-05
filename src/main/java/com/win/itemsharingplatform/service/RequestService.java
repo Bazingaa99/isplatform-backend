@@ -48,7 +48,9 @@ public class RequestService {
         requestRepository.deleteRequestById(requestId);
     }
 
-    public void deleteRequestsByItemIdAndAccepted(Long itemId, boolean accepted) { requestRepository.deleteRequestsByItemIdAndAccepted(itemId, accepted); }
+    public void deleteRequestsByItemIdAndAcceptedIsFalseAndReturnedIsFalse(Long itemId) {
+        requestRepository.deleteRequestsByItemIdAndAcceptedIsFalseAndReturnedIsFalse(itemId);
+    }
 
     public void updateAcceptanceStatus(Long requestId, Boolean isAccepted){
         requestRepository.updateResponseStatus(requestId,true);
