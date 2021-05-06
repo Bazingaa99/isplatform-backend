@@ -66,6 +66,9 @@ public class Item implements Serializable {
     @Column(name = "is_hidden")
     private boolean isHidden = false;
 
+    @Column(name = "is_available")
+    private boolean isAvailable = true;
+
     @Column(name = "bookmark_count")
     private int bookmarkCount = 0;
 

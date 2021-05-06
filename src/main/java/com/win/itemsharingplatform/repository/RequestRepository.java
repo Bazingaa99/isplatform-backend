@@ -32,21 +32,21 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
 
     Optional<Request> findItemById(Long id);
 
-    List<Request> findRequestsByRequesterIdAndAccepted(Long requesterId, boolean accepted);
+    List<Request> findRequestsByRequesterIdAndAcceptedAndReturned(Long requesterId, boolean accepted, boolean returned);
 
     @Query(value = " SELECT request.*" +
                    " FROM request join item on item.id = request.item_id " +
-                   " WHERE item.owner_id = :ownerId AND request.accepted = :accepted AND request.responded = :responded", nativeQuery = true)
-    List<Request> findRequestsByUserIdAndAcceptedAndResponded(Long ownerId, boolean accepted, boolean responded);
+                   " WHERE item.owner_id = :ownerId AND request.accepted = :accepted AND request.responded = :responded AND request.returned = :returned", nativeQuery = true)
+    List<Request> findRequestsByUserIdAndAcceptedAndRespondedAndReturned(Long ownerId, boolean accepted, boolean responded, boolean returned);
 
     Boolean existsRequestByItemIdAndRequesterId(Long itemId, Long requesterId);
 
-    List<Request> findRequestsByRequesterIdAndResponded(Long userId, Boolean responded);
+    List<Request> findRequestsByRequesterIdAndRespondedAndReturned(Long userId, Boolean responded, Boolean returned);
 
     @Query(value = " SELECT request.*" +
             " FROM request join item on item.id = request.item_id " +
-            " WHERE item.owner_id = :ownerId AND request.responded = :responded", nativeQuery = true)
-    List<Request> findRequestsByUserIdAndResponded(Long ownerId, Boolean responded);
+            " WHERE item.owner_id = :ownerId AND request.responded = :responded AND request.returned =:returned", nativeQuery = true)
+    List<Request> findRequestsByUserIdAndRespondedAndReturned(Long ownerId, Boolean responded, Boolean returned);
 
     Request findRequestByItemIdAndRequesterId(Long itemId, Long requesterId);
 
@@ -68,8 +68,8 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
     @Transactional
     @Modifying
     @Query("UPDATE Request c " +
-            "SET c.accepted = ?2 " +
+            "SET c.accepted = ?2, c.shareDate=?3 " +
             "WHERE c.id=?1 ")
     void updateAcceptanceStatus(Long requestId,
-                                Boolean isAccepted);
+                                Boolean isAccepted, LocalDateTime localDateTime);
 }
