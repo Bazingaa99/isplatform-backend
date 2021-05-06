@@ -1,6 +1,7 @@
 package com.win.itemsharingplatform.service;
 
 import com.win.itemsharingplatform.exception.EmailNotFoundException;
+import com.win.itemsharingplatform.exception.IdNotFoundException;
 import com.win.itemsharingplatform.model.ConfirmationToken;
 import com.win.itemsharingplatform.model.User;
 import com.win.itemsharingplatform.repository.UserRepository;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserService implements UserDetailsService {
     private final static String EMAIL_NOT_FOUND_MSG = "User with email %email not found";
+    private final static String ID_NOT_FOUND_MSG = "User with email %id not found";
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
@@ -64,4 +66,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findIfUserExistsByIdAndUserId(groupId, userId).isPresent();
     }
 
+    public User getUserById(long id){
+        return userRepository.findById(id).orElseThrow(() -> new IdNotFoundException(String.format(ID_NOT_FOUND_MSG, id)));
+    }
 }
