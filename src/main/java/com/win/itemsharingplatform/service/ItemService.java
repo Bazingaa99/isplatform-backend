@@ -48,7 +48,7 @@ public class ItemService {
     }
 
     public List<Item> findItemsByHiddenIsFalseAndAvailableIsTrue(Long groupId){
-        return itemRepository.findItemsByHiddenIsFalseAndAvailableIsTrueAndGroupId(groupId);
+        return itemRepository.findItemsByAvailableIsTrueAndGroupId(groupId);
     }
 
     public Item findItemByIdAndOwnerId(Long itemId, Long userId){
