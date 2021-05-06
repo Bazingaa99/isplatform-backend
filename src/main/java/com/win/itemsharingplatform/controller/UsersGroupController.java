@@ -60,10 +60,13 @@ public class UsersGroupController {
         return new ResponseEntity<>(newUsersGroup, HttpStatus.CREATED);
     }
 
-    @PostMapping("/update")
-    public ResponseEntity<UsersGroup> usersGroup(@RequestBody UsersGroup usersGroup) {
-        UsersGroup updateUsersGroup = usersGroupService.updateUsersGroup(usersGroup);
-        return new ResponseEntity<>(updateUsersGroup, HttpStatus.OK);
+    @PutMapping("/update/")
+    public void updateUsersGroup(@Valid @RequestBody UsersGroupRequest usersGroupRequest) {
+        User user = userService.getUserByEmail(usersGroupRequest.getEmail());
+        User itemOwner  = userService.getUserById(usersGroupRequest.getUsersGroup().getAdmin_id());
+        if(user == itemOwner){
+            usersGroupService.updateUsersGroup(usersGroupRequest.getUsersGroup());
+        }
     }
 
     @PostMapping("/delete/{id}")
@@ -109,8 +112,18 @@ public class UsersGroupController {
         }else{
             return new AddToGroupResponse("You are already in this group");
         }
-
-
     }
 
+    @GetMapping("/check/if/group/owner/{groupId}&{email}")
+    public ResponseEntity<Boolean> checkUserIsGroupOwner(@PathVariable("groupId") Long groupId, @PathVariable("email") String email){
+        Long groupOwnerId = usersGroupService.findGroupByGroupId(groupId).get().getAdmin_id();
+        Long userId = userService.getUserByEmail(email).getId();
+        return new ResponseEntity<>((groupOwnerId == userId), HttpStatus.OK);
+    }
+
+    @GetMapping("/get/group/data/{groupId}")
+    public ResponseEntity<UsersGroup> checkUserIsGroupOwner(@PathVariable("groupId") Long groupId){
+        UsersGroup group = usersGroupService.findGroupByGroupId(groupId).get();
+        return new ResponseEntity<>(group, HttpStatus.OK);
+    }
 }
