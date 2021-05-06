@@ -33,4 +33,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             "SET i.available = ?2 " +
             "WHERE i.id=?1 ")
     void updateAvailableStatus(Long itemId, boolean available);
+
+
 }

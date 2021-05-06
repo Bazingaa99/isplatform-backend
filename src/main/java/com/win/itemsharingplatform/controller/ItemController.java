@@ -136,4 +136,5 @@ public class ItemController {
         Boolean bookmarkExists = userHasBookmarksService.existsUserHasBookmarksByUserIdAndItemId(userId, itemId);
         return new ResponseEntity<>(bookmarkExists, HttpStatus.OK);
     }
+
 }

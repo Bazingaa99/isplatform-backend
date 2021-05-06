@@ -1,6 +1,7 @@
 package com.win.itemsharingplatform.service;
 
 import com.win.itemsharingplatform.exception.RequestExistsException;
+import com.win.itemsharingplatform.model.Item;
 import com.win.itemsharingplatform.model.Request;
 import com.win.itemsharingplatform.repository.RequestRepository;
 import org.apache.tomcat.jni.Local;
@@ -20,8 +21,8 @@ public class RequestService {
     }
 
     public Request addRequest(Request request){
-        if(requestRepository.existsRequestByItemIdAndRequesterId(request.getItem().getId(), request.getRequester().getId())) {
-            Request r = requestRepository.findRequestByItemIdAndRequesterId(request.getItem().getId(), request.getRequester().getId());
+        if(requestRepository.existsRequestByItemIdAndRequesterIdAndReturnedIsFalse(request.getItem().getId(), request.getRequester().getId())) {
+            Request r = requestRepository.findRequestByItemIdAndRequesterIdAndReturnedIsFalse(request.getItem().getId(), request.getRequester().getId());
             requestRepository.deleteRequestById(r.getId());
         }
         return requestRepository.save(request);
@@ -44,8 +45,8 @@ public class RequestService {
         return requestRepository.findRequestsByRequesterIdAndAcceptedAndReturned(userId, isAccepted, returned);
     }
 
-    public Request findRequestByItemIdAndRequesterId(Long itemId, Long requesterId){
-        return requestRepository.findRequestByItemIdAndRequesterId(itemId, requesterId);
+    public Request findRequestByItemIdAndRequesterIdAndReturnedIsFalse(Long itemId, Long requesterId){
+        return requestRepository.findRequestByItemIdAndRequesterIdAndReturnedIsFalse(itemId, requesterId);
     }
 
     public void deleteRequest(Long requestId){
@@ -69,5 +70,9 @@ public class RequestService {
 
     public void deleteRequestsByItemId(Long itemId){
         requestRepository.deleteByItemId(itemId);
+    }
+
+    public Boolean checkIfItemIsReturned(Item item) {
+        return requestRepository.existsByItemAndReturnedIsFalse(item);
     }
 }
