@@ -39,7 +39,7 @@ public class Request implements Serializable {
     @NotNull
     private boolean responded = false;
 
-    @Column(name = "returned")
+    @Column(name = "returned",columnDefinition = "boolean")
     @NotNull
     private boolean returned = false;
 

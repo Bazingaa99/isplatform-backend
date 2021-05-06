@@ -66,9 +66,6 @@ public class RequestController {
         if (itemService.findItemByIdAndOwnerId(itemRequestRequest.getRequest().getItem().getId(), userId) == null) {
             itemRequestRequest.getRequest().setRequester(new User(userId));
             Request newRequest = requestService.addRequest(itemRequestRequest.getRequest());
-            Item item = itemService.findItemById(itemRequestRequest.getRequest().getItem().getId());
-            item.setAvailable(false);
-            itemService.addItem(item);
             return new ResponseEntity<>(newRequest, HttpStatus.CREATED);
         } else {
             throw new RequesterIsOwnerException("Requester is owner.");
@@ -89,9 +86,10 @@ public class RequestController {
     @PutMapping("update-acceptance")
     public void updateAcceptance(@RequestBody ResponseToRequest responseToRequest) {
         Request request = requestService.findRequestById(responseToRequest.getRequestId());
-        requestService.updateAcceptanceStatus(responseToRequest.getRequestId(), responseToRequest.getIsAccepted());
-        if (responseToRequest.getIsAccepted()) {
-            requestService.deleteRequestsByItemIdAndAccepted(request.getItem().getId(), false);
+        requestService.updateAcceptanceStatus(responseToRequest.getRequestId(),responseToRequest.getIsAccepted());
+        if(responseToRequest.getIsAccepted()){
+            requestService.deleteRequestsByItemIdAndAcceptedIsFalseAndReturnedIsFalse(request.getItem().getId());
+            itemService.updateAvailableStatus(request.getItem().getId(), false);
         }
     }
 

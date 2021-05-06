@@ -64,10 +64,10 @@ public class Item implements Serializable {
     private int viewCount;
 
     @Column(name = "is_hidden")
-    private boolean isHidden = false;
+    private boolean hidden = false;
 
     @Column(name = "is_available")
-    private boolean isAvailable = true;
+    private boolean available = true;
 
     @Column(name = "bookmark_count")
     private int bookmarkCount = 0;

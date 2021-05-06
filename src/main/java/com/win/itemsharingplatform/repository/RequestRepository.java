@@ -26,7 +26,7 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
     void deleteByItemId(Long itemId);
 
     @Transactional
-    void deleteRequestsByItemIdAndAccepted(Long id, boolean accepted);
+    void deleteRequestsByItemIdAndAcceptedIsFalseAndReturnedIsFalse(Long id);
 
     Request findRequestById(Long requestId);
 
