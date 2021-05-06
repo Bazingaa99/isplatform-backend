@@ -136,4 +136,10 @@ public class ItemController {
         Boolean bookmarkExists = userHasBookmarksService.existsUserHasBookmarksByUserIdAndItemId(userId, itemId);
         return new ResponseEntity<>(bookmarkExists, HttpStatus.OK);
     }
+
+    @GetMapping("/find/user/items/{email}")
+    public ResponseEntity<List<Item>> checkUserIsGroupOwner(@PathVariable("email") String email){
+        List<Item> userItems = itemService.findItemsByOwnerId(userService.getUserByEmail(email).getId());
+        return new ResponseEntity<>(userItems, HttpStatus.OK);
+    }
 }

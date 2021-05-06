@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface ItemRepository extends JpaRepository<Item, Long> {
     Optional<Item> findItemById(Long id);
 
+    List<Item> findItemsByOwnerId(Long ownerId);
+
     List<Item> findItemsByAvailableIsTrueAndGroupId(Long groupId);
 
     Item findItemByIdAndOwnerId(Long itemId, Long userId);

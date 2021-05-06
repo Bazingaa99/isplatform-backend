@@ -42,6 +42,10 @@ public class ItemService {
         return itemRepository.findAll();
     }
 
+    public List<Item> findItemsByOwnerId(Long ownerId){
+        return itemRepository.findItemsByOwnerId(ownerId);
+    }
+
     public Item findItemById(Long id){
         return itemRepository.findItemById(id)
                 .orElseThrow(() -> new ItemNotFoundException("Item by id (" + id + ") was not found"));
