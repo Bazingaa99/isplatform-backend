@@ -42,8 +42,12 @@ public class ItemService {
         return itemRepository.findAll();
     }
 
-    public List<Item> findItemsByOwnerId(Long ownerId){
-        return itemRepository.findItemsByOwnerId(ownerId);
+    public List<Item> findUserItems(Long ownerId, boolean userIsItemsOwner){
+        if(userIsItemsOwner) {
+            return itemRepository.findItemsByOwnerId(ownerId);
+        } else {
+            return itemRepository.findPublicItemsByOwnerId(ownerId);
+        }
     }
 
     public Item findItemById(Long id){
