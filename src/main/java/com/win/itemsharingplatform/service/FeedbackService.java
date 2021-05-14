@@ -34,4 +34,10 @@ public class FeedbackService {
     public List<Feedback> getFeedbacksByUserId(Long userId) {
         return feedbackRepository.findFeedbackByUserId(userId);
     }
+
+    public Feedback getFeedbacksById(Long id) {
+        return feedbackRepository.findFeedbackById(id);
+    }
+
+    public void deleteFeedback(Long id)  { feedbackRepository.deleteById(id); }
 }

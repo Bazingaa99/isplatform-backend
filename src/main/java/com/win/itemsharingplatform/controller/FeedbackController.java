@@ -49,4 +49,15 @@ public class FeedbackController {
         List<Feedback> feedbacks = feedbackService.getFeedbacksByUserId(userId);
         return new ResponseEntity<>(feedbacks, HttpStatus.OK);
     }
+
+    @DeleteMapping("/delete/{feedbackId}&{email}")
+    public ResponseEntity<?> deleteItem(@PathVariable("feedbackId") Long feedbackId, @PathVariable("email") String userEmail) {
+        // checking if the feedback writer is the same person as the one that tries to update it
+        if(feedbackService.getFeedbacksById(feedbackId).getWriter() == userService.getUserByEmail(userEmail)) {
+            feedbackService.deleteFeedback(feedbackId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else{
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+    }
 }
