@@ -38,6 +38,17 @@ public class FeedbackController {
         } else throw new FeedbackForYourselfException("You can not leave feedback for yourself.");
     }
 
+    @PutMapping("/update")
+    public void updateFeedback(@Valid @RequestBody FeedbackRequest feedbackRequest) {
+        User feedbackWriter = userService.getUserByEmail(feedbackRequest.getEmail());
+        User feedbackReceiver = userService.getUserById(feedbackRequest.getReceiverId());
+        if(!feedbackWriter.equals(feedbackReceiver)){
+            feedbackRequest.getFeedback().setWriter(feedbackWriter);
+            feedbackRequest.getFeedback().setUser(feedbackReceiver);
+            feedbackService.updateFeedback(feedbackRequest.getFeedback());
+        }
+    }
+
     @GetMapping("/get/feedbacks/count/{userId}")
     public ResponseEntity<Long> getFeedbacksCountByUserId (@PathVariable("userId") Long userId) {
         Long feedbacksCount = feedbackService.getFeedbacksCountByUserId(userId);

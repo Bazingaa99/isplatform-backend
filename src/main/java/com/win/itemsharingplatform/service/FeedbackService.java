@@ -27,6 +27,8 @@ public class FeedbackService {
         return feedbackRepository.save(feedback);
     }
 
+    public Feedback updateFeedback(Feedback feedback) { return feedbackRepository.save(feedback); }
+
     public Long getFeedbacksCountByUserId(Long userId) {
         return feedbackRepository.findFeedbacksCountByUserId(userId);
     }
