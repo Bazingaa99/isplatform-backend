@@ -24,6 +24,8 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
+import static java.lang.Long.parseLong;
+
 @RestController
 @RequestMapping("/isp/items")
 @Data
@@ -137,9 +139,10 @@ public class ItemController {
         return new ResponseEntity<>(bookmarkExists, HttpStatus.OK);
     }
 
-    @GetMapping("/find/user/items/{email}")
-    public ResponseEntity<List<Item>> checkUserIsGroupOwner(@PathVariable("email") String email){
-        List<Item> userItems = itemService.findItemsByOwnerId(userService.getUserByEmail(email).getId());
+    @GetMapping("/find/user/items/{email}&{userId}")
+    public ResponseEntity<List<Item>> checkUserIsGroupOwner(@PathVariable("email") String email, @PathVariable("userId") String userId){
+        Boolean userIsItemsOwner = (userService.getUserByEmail(email).getId().toString().equals(userId));
+        List<Item> userItems = itemService.findUserItems(parseLong(userId), userIsItemsOwner);
         return new ResponseEntity<>(userItems, HttpStatus.OK);
     }
 }

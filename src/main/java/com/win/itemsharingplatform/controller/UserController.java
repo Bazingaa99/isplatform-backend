@@ -1,7 +1,5 @@
 package com.win.itemsharingplatform.controller;
 
-import com.win.itemsharingplatform.model.User;
-import com.win.itemsharingplatform.model.UsersGroup;
 import com.win.itemsharingplatform.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +19,12 @@ public class UserController {
     @GetMapping("/{email}")
     public ResponseEntity<UserDetails> getUserByEmail (@PathVariable("email") String email) {
         UserDetails user = userService.loadUserByUsername(email);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping("/id/{id}")
+    public ResponseEntity<UserDetails> getUserById (@PathVariable("id") Long id) {
+        UserDetails user = userService.getUserById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 }

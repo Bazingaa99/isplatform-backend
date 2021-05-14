@@ -14,6 +14,9 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     List<Item> findItemsByOwnerId(Long ownerId);
 
+    @Query(value = "SELECT * FROM item WHERE owner_id = :ownerId AND is_hidden = false AND is_available = true", nativeQuery = true)
+    List<Item> findPublicItemsByOwnerId(Long ownerId);
+
     List<Item> findItemsByAvailableIsTrueAndGroupId(Long groupId);
 
     Item findItemByIdAndOwnerId(Long itemId, Long userId);
