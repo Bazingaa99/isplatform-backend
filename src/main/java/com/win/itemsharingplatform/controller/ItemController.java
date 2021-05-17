@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import javax.xml.ws.Response;
 import java.io.IOException;
 import java.util.List;
 
@@ -136,5 +137,11 @@ public class ItemController {
         Boolean bookmarkExists = userHasBookmarksService.existsUserHasBookmarksByUserIdAndItemId(userId, itemId);
         return new ResponseEntity<>(bookmarkExists, HttpStatus.OK);
     }
-
+    @GetMapping("viewed/{itemId}")
+    public ResponseEntity<HttpStatus> itemViewed (@PathVariable("itemId") Long itemId){
+        Item item = itemService.findItemById(itemId);
+        item.setViewCount(item.getViewCount()+1);
+        itemService.updateItem(item);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 }

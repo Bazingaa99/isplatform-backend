@@ -109,7 +109,8 @@ public class RequestController {
         if (itemService.findItemById(request.getItem().getId()).getOwner() == userService.getUserByEmail(itemReturnedRequest.getEmail())) {
             Item item = itemService.findItemById(request.getItem().getId());
             item.setAvailable(true);
-            itemService.addItem(item);
+            item.setRelistCount(item.getRelistCount()+1);
+            itemService.updateItem(item);
         }
     }
     @GetMapping("checkIfItemIsReturned/{itemId}")
