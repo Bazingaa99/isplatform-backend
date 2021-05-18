@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -68,5 +69,9 @@ public class UserService implements UserDetailsService {
 
     public User getUserById(long id){
         return userRepository.findById(id).orElseThrow(() -> new IdNotFoundException(String.format(ID_NOT_FOUND_MSG, id)));
+    }
+
+    public List<User> getUsersByGroupId(Long groupId){
+        return userRepository.findUsersByGroupId(groupId);
     }
 }
