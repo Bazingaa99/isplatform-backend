@@ -73,9 +73,9 @@ public class RequestController {
     }
 
     @GetMapping("exists/{itemId}&{email}")
-    public Request findRequestByItemIdAndRequesterId(@PathVariable("itemId") Long itemId, @PathVariable("email") String email) {
+    public Request findRequestByItemIdAndRequesterIdAndReturnedIsFalse(@PathVariable("itemId") Long itemId, @PathVariable("email") String email) {
         Long requesterId = userService.getUserByEmail(email).getId();
-        return requestService.findRequestByItemIdAndRequesterId(itemId, requesterId);
+        return requestService.findRequestByItemIdAndRequesterIdAndReturnedIsFalse(itemId, requesterId);
     }
 
     @DeleteMapping("delete/{requestId}")
@@ -111,5 +111,10 @@ public class RequestController {
             item.setAvailable(true);
             itemService.addItem(item);
         }
+    }
+    @GetMapping("checkIfItemIsReturned/{itemId}")
+    public ResponseEntity<Boolean> checkIfItemIsReturned(@PathVariable("itemId") Long id){
+        Boolean itemIsReturned = requestService.checkIfItemIsReturned(itemService.findItemById(id));
+        return new ResponseEntity<>(itemIsReturned,HttpStatus.OK);
     }
 }

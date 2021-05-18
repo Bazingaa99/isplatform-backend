@@ -28,8 +28,10 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
            " WHERE id = ?1")
     void updateItemBookmarkCount(Long itemId, int value);
 
-    @Query(value = " SELECT item.* FROM item LEFT JOIN user_has_bookmarks uhb on item.id" +
+    @Query(value = " SELECT item.* FROM item LEFT JOIN user_has_bookmarks uhb on item.id = uhb.item_id" +
                    " WHERE uhb.user_id = :userId AND item.is_available = true", nativeQuery = true)
+//    @Query(value = " SELECT item.* FROM item, user_has_bookmarks" +
+//                    " WHERE item.id = user_has_bookmarks.item_id AND user_has_bookmarks.user_id = :userId", nativeQuery = true)
     List<Item> findItemsBookmarkedByUser(Long userId);
 
     @Transactional
@@ -38,4 +40,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             "SET i.available = ?2 " +
             "WHERE i.id=?1 ")
     void updateAvailableStatus(Long itemId, boolean available);
+
+
 }

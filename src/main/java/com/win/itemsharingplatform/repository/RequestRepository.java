@@ -39,16 +39,19 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
                    " WHERE item.owner_id = :ownerId AND request.accepted = :accepted AND request.responded = :responded AND request.returned = :returned", nativeQuery = true)
     List<Request> findRequestsByUserIdAndAcceptedAndRespondedAndReturned(Long ownerId, boolean accepted, boolean responded, boolean returned);
 
-    Boolean existsRequestByItemIdAndRequesterId(Long itemId, Long requesterId);
+    Boolean existsRequestByItemIdAndRequesterIdAndReturnedIsFalse(Long itemId, Long requesterId);
 
     List<Request> findRequestsByRequesterIdAndRespondedAndReturned(Long userId, Boolean responded, Boolean returned);
+
+
+    Boolean existsByItemAndReturnedIsFalse(Item item);
 
     @Query(value = " SELECT request.*" +
             " FROM request join item on item.id = request.item_id " +
             " WHERE item.owner_id = :ownerId AND request.responded = :responded AND request.returned =:returned", nativeQuery = true)
     List<Request> findRequestsByUserIdAndRespondedAndReturned(Long ownerId, Boolean responded, Boolean returned);
 
-    Request findRequestByItemIdAndRequesterId(Long itemId, Long requesterId);
+    Request findRequestByItemIdAndRequesterIdAndReturnedIsFalse(Long itemId, Long requesterId);
 
     @Transactional
     @Modifying
@@ -72,4 +75,6 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
             "WHERE c.id=?1 ")
     void updateAcceptanceStatus(Long requestId,
                                 Boolean isAccepted, LocalDateTime localDateTime);
+
+
 }
