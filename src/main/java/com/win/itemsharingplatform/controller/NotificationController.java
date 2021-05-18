@@ -2,6 +2,7 @@ package com.win.itemsharingplatform.controller;
 
 import com.win.itemsharingplatform.model.User;
 import com.win.itemsharingplatform.model.UserNotification;
+import com.win.itemsharingplatform.model.request.SetUserNotificationSeenRequest;
 import com.win.itemsharingplatform.model.request.UserNotificationRequest;
 import com.win.itemsharingplatform.service.NotificationService;
 import com.win.itemsharingplatform.service.UserService;
@@ -41,5 +42,18 @@ public class NotificationController {
         newUserNotification.setWriter(userService.getUserById(notificationRequest.getWriterId()));
         newUserNotification.setSeen(false);
         notifiationService.createNotification(newUserNotification);
+    }
+
+    @PutMapping("/set/seen/")
+    public void updateUsersGroup(@Valid @RequestBody SetUserNotificationSeenRequest setUserNotificationSeenRequest) {
+        System.out.println("works");
+        System.out.println("works");
+        System.out.println("works");
+        UserNotification notification = notifiationService.getNotificationById(setUserNotificationSeenRequest.getNotificationId());
+        System.out.println(notification);
+        System.out.println(notification);
+        System.out.println(notification);
+        notification.setSeen(true);
+        notifiationService.updateNotification(notification);
     }
 }

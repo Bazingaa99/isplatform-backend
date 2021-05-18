@@ -14,4 +14,6 @@ public interface NotificationRepository extends JpaRepository<UserNotification, 
     Long getNotificationsCountByReceiverId(Long receiverId);
 
     List<UserNotification> getNotificationsByReceiverId(Long userId);
+
+    UserNotification getNotificationById(Long id);
 }

@@ -22,25 +22,18 @@ public class NotificationService {
     }
 
     public UserNotification createNotification(UserNotification notification){
-        System.out.println(notification);
-        System.out.println(notification);
-        System.out.println(notification);
-        System.out.println(notification);
-        System.out.println(notification);
-        System.out.println(notification);
-        System.out.println(notification);
-        System.out.println(notification);
-        System.out.println(notification);
-        System.out.println(notification);
-        System.out.println(notification);
-        System.out.println(notification);
-        System.out.println(notification);
-        System.out.println(notification);
-        System.out.println(notification);
         return notificationRepository.save(notification);
     }
 
     public Long getNotificationsCountByReceiverId(Long receiverId) {
         return notificationRepository.getNotificationsCountByReceiverId(receiverId);
+    }
+
+    public UserNotification getNotificationById(Long id) {
+        return notificationRepository.getNotificationById(id);
+    }
+
+    public void updateNotification(UserNotification userNotification) {
+        notificationRepository.save(userNotification);
     }
 }
