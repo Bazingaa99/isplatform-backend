@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -25,6 +26,7 @@ public class NotificationController {
     @GetMapping("/{userId}")
     public ResponseEntity<List<UserNotification>> getUserNotifications (@PathVariable("userId") Long userId) {
         List<UserNotification> userNotification = notifiationService.getUserNotificationsByReceiverId(userId);
+        Collections.reverse(userNotification);
         return new ResponseEntity<>(userNotification, HttpStatus.OK);
     }
 
@@ -46,13 +48,7 @@ public class NotificationController {
 
     @PutMapping("/set/seen/")
     public void updateUsersGroup(@Valid @RequestBody SetUserNotificationSeenRequest setUserNotificationSeenRequest) {
-        System.out.println("works");
-        System.out.println("works");
-        System.out.println("works");
         UserNotification notification = notifiationService.getNotificationById(setUserNotificationSeenRequest.getNotificationId());
-        System.out.println(notification);
-        System.out.println(notification);
-        System.out.println(notification);
         notification.setSeen(true);
         notifiationService.updateNotification(notification);
     }
