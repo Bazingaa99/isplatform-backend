@@ -117,4 +117,10 @@ public class RequestController {
         Boolean itemIsReturned = requestService.checkIfItemIsReturned(itemService.findItemById(id));
         return new ResponseEntity<>(itemIsReturned,HttpStatus.OK);
     }
+
+    @GetMapping("/find/{id}")
+    public ResponseEntity<Request> getRequestById(@PathVariable("id") Long id) {
+        Request request = requestService.findRequestById(id);
+        return new ResponseEntity<>(request, HttpStatus.OK);
+    }
 }
