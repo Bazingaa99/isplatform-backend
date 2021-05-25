@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import javax.xml.ws.Response;
 import java.io.IOException;
 import java.util.List;
 
@@ -141,10 +142,18 @@ public class ItemController {
         return new ResponseEntity<>(bookmarkExists, HttpStatus.OK);
     }
 
+
     @GetMapping("/find/user/items/{email}&{userId}")
     public ResponseEntity<List<Item>> checkUserIsGroupOwner(@PathVariable("email") String email, @PathVariable("userId") String userId) {
         Boolean userIsItemsOwner = (userService.getUserByEmail(email).getId().toString().equals(userId));
         List<Item> userItems = itemService.findUserItems(parseLong(userId), userIsItemsOwner);
         return new ResponseEntity<>(userItems, HttpStatus.OK);
+    }
+    @GetMapping("viewed/{itemId}")
+    public ResponseEntity<HttpStatus> itemViewed (@PathVariable("itemId") Long itemId){
+        Item item = itemService.findItemById(itemId);
+        item.setViewCount(item.getViewCount()+1);
+        itemService.updateItem(item);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

@@ -61,7 +61,10 @@ public class Item implements Serializable {
     private Date dateCreated;
 
     @Column(name = "view_count")
-    private int viewCount;
+    private int viewCount=0;
+
+    @Column(name = "relist_count")
+    private int relistCount=0;
 
     @Column(name = "is_hidden")
     private boolean hidden = false;
