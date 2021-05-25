@@ -1,15 +1,20 @@
 package com.win.itemsharingplatform.controller;
 
+import com.win.itemsharingplatform.exception.InvalidOldPasswordException;
+import com.win.itemsharingplatform.exception.UserEmailExistsException;
 import com.win.itemsharingplatform.model.User;
+
+import com.win.itemsharingplatform.model.UsersGroup;
+import com.win.itemsharingplatform.model.request.ChangePasswordRequest;
+import com.win.itemsharingplatform.model.request.ChangeUserRequest;
 import com.win.itemsharingplatform.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 import java.util.List;
 
@@ -25,6 +30,7 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+
     @GetMapping("/id/{id}")
     public ResponseEntity<UserDetails> getUserById (@PathVariable("id") Long id) {
         UserDetails user = userService.getUserById(id);
@@ -32,8 +38,24 @@ public class UserController {
     }
 
     @GetMapping("/group/{group_id}")
-    public ResponseEntity<List<User>> getUsersByGroupId(@PathVariable("group_id") Long groupId){
+    public ResponseEntity<List<User>> getUsersByGroupId(@PathVariable("group_id") Long groupId) {
         List<User> users = userService.getUsersByGroupId(groupId);
         return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+    @PutMapping("/update")
+    public void updateUserInfo(@RequestBody ChangeUserRequest user) throws UserEmailExistsException {
+
+        userService.updateUser(user);
+    }
+
+    @PutMapping("/updatePassword")
+    public void updateUserPassword(@RequestBody ChangePasswordRequest user){
+
+        User oldUser = userService.getUserByEmail(user.getEmail());
+        if(!userService.checkIfValidOldPassword(oldUser,user.getOldPassword())){
+            throw new InvalidOldPasswordException("Bad old password");
+        };
+        userService.changeUserPassword(oldUser, user.getNewPassword());
+
     }
 }
